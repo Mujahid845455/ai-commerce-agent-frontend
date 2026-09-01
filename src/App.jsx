@@ -652,6 +652,19 @@ function AIShopping({ cart, setCart }) {
               currency: "INR",
             });
             setAgentCheckoutSuccess(true);
+
+            const successMsg = {
+              id: "a_success_" + Date.now(),
+              sender: "agent",
+              text: `🎉 **Payment & Order Confirmed!**\n\nYour payment of **₹${(amountPaise / 100).toLocaleString("en-IN")}** was successfully verified.\n\n- **Order ID:** \`${razorpayOrderId}\`\n- **Payment ID:** \`${razorpayResponse.razorpay_payment_id || "pay_test_verified"}\`\n- **Status:** Verified & Stock Inventory Updated\n\nThank you for shopping with AgentPay AI Agent! 🚀`,
+              isPaymentSuccess: true,
+              paymentDetails: {
+                orderId: razorpayOrderId,
+                paymentId: razorpayResponse.razorpay_payment_id,
+                amount: amountPaise / 100
+              }
+            };
+            setChatMessages((prev) => [...prev, successMsg]);
           } catch (error) {
             console.error("AI Payment verification error:", error);
             setPaymentError(error?.message || "Payment verification failed.");
@@ -760,6 +773,14 @@ function AIShopping({ cart, setCart }) {
               currency: order.currency || "INR",
             });
             setShowApprovalModal(false);
+
+            const successMsg = {
+              id: "a_success_" + Date.now(),
+              sender: "agent",
+              text: `🎉 **Payment & Order Confirmed!**\n\nYour order for **${selectedProduct.name}** (**₹${(amountPaise / 100).toLocaleString("en-IN")}**) was successfully paid & verified!\n\n- **Order ID:** \`${razorpayOrderId}\`\n- **Status:** Verified & Paid\n\nThank you for choosing AgentPay! 🚀`,
+              isPaymentSuccess: true,
+            };
+            setChatMessages((prev) => [...prev, successMsg]);
             setSelectedProduct(null);
 
             setCart((current) =>

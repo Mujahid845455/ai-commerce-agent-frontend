@@ -643,6 +643,35 @@ function AIShopping({ cart, setCart }) {
     });
     setAgentCheckoutSuccess(true);
 
+    const newOrderRecord = {
+      id: razorpayOrderId,
+      created_at: new Date().toISOString(),
+      status: "CONFIRMED",
+      payment_status: "PAID",
+      delivery_date: "Today",
+      total_amount_inr: amountPaise / 100,
+      total_amount_paise: amountPaise,
+      items: items.length > 0 ? items.map((it) => ({
+        product_name: it.product_name || it.name || "AgentPay Purchase Item",
+        color: it.color || "Standard",
+        size: it.size || "Standard",
+        quantity: it.quantity || 1,
+        unit_price_inr: (it.price_paise ? it.price_paise / 100 : (it.price || 1999)),
+        image_url: it.image_url || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80",
+      })) : [{
+        product_name: "AgentPay AI Purchase",
+        quantity: 1,
+        unit_price_inr: amountPaise / 100,
+        image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80",
+      }],
+    };
+    try {
+      const existingAiOrders = JSON.parse(localStorage.getItem("agentpay_ai_orders") || "[]");
+      localStorage.setItem("agentpay_ai_orders", JSON.stringify([newOrderRecord, ...existingAiOrders]));
+    } catch (e) {
+      console.warn("Local storage order save notice:", e);
+    }
+
     const successMsg = {
       id: "a_success_" + Date.now(),
       sender: "agent",
@@ -700,6 +729,35 @@ function AIShopping({ cart, setCart }) {
               currency: "INR",
             });
             setAgentCheckoutSuccess(true);
+
+            const newOrderRecord = {
+              id: razorpayOrderId,
+              created_at: new Date().toISOString(),
+              status: "CONFIRMED",
+              payment_status: "PAID",
+              delivery_date: "Today",
+              total_amount_inr: amountPaise / 100,
+              total_amount_paise: amountPaise,
+              items: items.length > 0 ? items.map((it) => ({
+                product_name: it.product_name || it.name || "AgentPay Purchase Item",
+                color: it.color || "Standard",
+                size: it.size || "Standard",
+                quantity: it.quantity || 1,
+                unit_price_inr: (it.price_paise ? it.price_paise / 100 : (it.price || 1999)),
+                image_url: it.image_url || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80",
+              })) : [{
+                product_name: "AgentPay AI Purchase",
+                quantity: 1,
+                unit_price_inr: amountPaise / 100,
+                image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80",
+              }],
+            };
+            try {
+              const existingAiOrders = JSON.parse(localStorage.getItem("agentpay_ai_orders") || "[]");
+              localStorage.setItem("agentpay_ai_orders", JSON.stringify([newOrderRecord, ...existingAiOrders]));
+            } catch (e) {
+              console.warn("Local storage order save notice:", e);
+            }
 
             const successMsg = {
               id: "a_success_" + Date.now(),
@@ -2324,7 +2382,8 @@ function Orders({ setCart }) {
     },
   ];
 
-  const rawOrders = orders.length > 0 ? orders : pendingOrder ? [pendingOrder, ...demoOrders] : demoOrders;
+  const localAiOrders = JSON.parse(localStorage.getItem("agentpay_ai_orders") || "[]");
+  const rawOrders = [...localAiOrders, ...orders, ...demoOrders];
 
   const allOrderCards = useMemo(() => {
     const list = [];

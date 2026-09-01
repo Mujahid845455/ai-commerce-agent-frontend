@@ -504,6 +504,9 @@ function AIShopping({ cart, setCart }) {
 
       if (data.checkout_intent) {
         setAgentCheckoutIntent(data.checkout_intent);
+        setTimeout(() => {
+          handleAiApproveAndPay(data.checkout_intent);
+        }, 300);
       }
 
       if (Array.isArray(data.products) && data.products.length > 0) {
@@ -605,6 +608,72 @@ function AIShopping({ cart, setCart }) {
     }
   }
 
+  async function handleAiApproveAndPay(intent) {
+    const cIntent = intent || agentCheckoutIntent;
+    if (!cIntent || paymentLoading) return;
+
+    try {
+      setPaymentLoading(true);
+      setPaymentError("");
+
+      if (!window.Razorpay) {
+        throw new Error("Razorpay Checkout SDK is not loaded.");
+      }
+
+      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_TVtzvo10ZXHRxf";
+      const razorpayOrderId = cIntent.order_id || cIntent.razorpay_order_id;
+      const amountPaise = cIntent.amount_paise || cIntent.total_amount_paise || 29900;
+      const items = cIntent.items || [];
+
+      const razorpay = new window.Razorpay({
+        key: razorpayKey,
+        amount: amountPaise,
+        currency: cIntent.currency || "INR",
+        name: "AgentPay AI Agent Checkout",
+        description: `AI Conversational Order (${items.length || 1} items)`,
+        order_id: razorpayOrderId,
+        theme: { color: "#7c5cff" },
+        handler: async (razorpayResponse) => {
+          try {
+            const verification = await api.post("/payments/verify", {
+              items: items.map((it) => ({
+                product_id: it.product_id || it.id || "rec_socks_299",
+                quantity: it.quantity || 1,
+              })),
+              razorpay_order_id: razorpayResponse.razorpay_order_id,
+              razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+              razorpay_signature: razorpayResponse.razorpay_signature,
+            });
+
+            setPaymentSuccess({
+              ...verification,
+              order_id: razorpayOrderId,
+              total_amount_paise: amountPaise,
+              currency: "INR",
+            });
+            setAgentCheckoutSuccess(true);
+          } catch (error) {
+            console.error("AI Payment verification error:", error);
+            setPaymentError(error?.message || "Payment verification failed.");
+          } finally {
+            setPaymentLoading(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setPaymentLoading(false);
+          },
+        },
+      });
+
+      razorpay.open();
+    } catch (err) {
+      console.error("AI Checkout error:", err);
+      setPaymentError(err.message || "Failed to open payment gateway.");
+      setPaymentLoading(false);
+    }
+  }
+
   // Product card -> explicit approval gate.
   function handleBuyProduct(product) {
     if (!product || product.stock <= 0) return;
@@ -626,10 +695,7 @@ function AIShopping({ cart, setCart }) {
         throw new Error("Razorpay Checkout SDK is not loaded.");
       }
 
-      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
-      if (!razorpayKey) {
-        throw new Error("VITE_RAZORPAY_KEY_ID is missing.");
-      }
+      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_TVtzvo10ZXHRxf";
 
       let order;
       try {
@@ -912,7 +978,7 @@ function AIShopping({ cart, setCart }) {
                         🛒 Checkout Intent Ready — ₹{(msg.checkoutIntent.amount_paise / 100).toLocaleString("en-IN")}
                       </div>
                       <button
-                        onClick={handleAiApproveAndPay}
+                        onClick={() => handleAiApproveAndPay(msg.checkoutIntent)}
                         disabled={paymentLoading}
                         style={{ width: "100%", padding: "8px", background: "#7c5cff", color: "white", border: 0, borderRadius: 6, fontWeight: 700, cursor: "pointer", fontSize: 12 }}
                       >
@@ -5155,6 +5221,62 @@ function LoginPage() {
         </p>
 
         <form onSubmit={handleLogin}>
+          {/* Quick Demo Login Fill Buttons */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 8, letterSpacing: "0.5px" }}>
+              1-CLICK DEMO CREDENTIALS:
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("customer@agentpay.demo");
+                  setPassword("Customer@123");
+                }}
+                style={{
+                  padding: "9px 12px",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  background: "#f8fafc",
+                  color: "#1e293b",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6
+                }}
+              >
+                <User size={13} />
+                Demo Customer
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("merchant@agentpay.demo");
+                  setPassword("Merchant@123");
+                }}
+                style={{
+                  padding: "9px 12px",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  background: "#f8fafc",
+                  color: "#1e293b",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6
+                }}
+              >
+                <ShoppingBag size={13} />
+                Demo Merchant
+              </button>
+            </div>
+          </div>
           <label
             style={{
               display: "block",

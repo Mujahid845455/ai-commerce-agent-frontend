@@ -16,6 +16,7 @@ import {
   Bot,
   BrainCircuit,
   Check,
+  CheckCircle,
   ChevronDown,
   CircleDollarSign,
   Copy,
@@ -5311,13 +5312,6 @@ function MerchantPolicies() {
     };
 
     localStorage.setItem("agentpay_policy_config", JSON.stringify(policyPayload));
-
-    // Also attempt backend update
-    try {
-      api.post("/policies/update", policyPayload).catch(() => {});
-    } catch {
-      // client-side fallback
-    }
 
     setSavedConfig(true);
     setTimeout(() => setSavedConfig(false), 4000);

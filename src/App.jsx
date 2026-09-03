@@ -2552,9 +2552,9 @@ function Orders({ setCart }) {
   }, [allOrderCards, searchQuery, activeFilter]);
 
   return (
-    <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "32px 20px", fontFamily: "Inter, system-ui, sans-serif" }}>
+    <main className="orders-responsive-container" style={{ maxWidth: "1100px", margin: "0 auto", padding: "32px 20px", fontFamily: "Inter, system-ui, sans-serif" }}>
       {/* Header Banner */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "28px", flexWrap: "wrap", gap: "16px" }}>
+      <div className="orders-header-banner" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "28px", flexWrap: "wrap", gap: "16px" }}>
         <div>
           <div style={{ fontSize: "11px", fontWeight: "800", color: "#7c5cff", textTransform: "uppercase", letterSpacing: "1px", display: "flex", alignItems: "center", gap: "6px" }}>
             <Package size={14} /> AgentPay Commerce Log
@@ -2577,10 +2577,10 @@ function Orders({ setCart }) {
       </div>
 
       {/* Search Bar & Filter Chips */}
-      <div style={{ background: "white", padding: "16px 20px", borderRadius: "16px", border: "1px solid #e2e8f0", boxShadow: "0 4px 14px rgba(0,0,0,0.03)", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+      <div className="orders-filter-bar" style={{ background: "white", padding: "16px 20px", borderRadius: "16px", border: "1px solid #e2e8f0", boxShadow: "0 4px 14px rgba(0,0,0,0.03)", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
 
         {/* Search */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "#f8fafc", padding: "10px 16px", borderRadius: "10px", border: "1px solid #cbd5e1", flex: 1, minWidth: "260px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "#f8fafc", padding: "10px 16px", borderRadius: "10px", border: "1px solid #cbd5e1", flex: 1, minWidth: "240px" }}>
           <Search size={16} color="#64748b" />
           <input
             type="text"
@@ -2592,7 +2592,7 @@ function Orders({ setCart }) {
         </div>
 
         {/* Filter Pills */}
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="orders-filter-pills" style={{ display: "flex", gap: "8px" }}>
           {[
             { key: "ALL", label: "All Orders" },
             { key: "DELIVERED", label: "Delivered" },
@@ -2610,6 +2610,7 @@ function Orders({ setCart }) {
                 border: "none",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
+                whiteSpace: "nowrap",
                 background: activeFilter === f.key ? "#7c5cff" : "#f1f5f9",
                 color: activeFilter === f.key ? "white" : "#475569",
               }}
@@ -2641,8 +2642,8 @@ function Orders({ setCart }) {
               }}
             >
               {/* Card Header */}
-              <div style={{ padding: "14px 20px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div className="order-card-header" style={{ padding: "14px 20px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                   <span style={{ fontSize: "12px", fontWeight: "800", color: "#2563eb", background: "#eef4ff", padding: "3px 10px", borderRadius: "6px" }}>
                     #{card.orderId}
                   </span>
@@ -2669,10 +2670,10 @@ function Orders({ setCart }) {
               </div>
 
               {/* Card Body */}
-              <div style={{ padding: "20px", display: "grid", gridTemplateColumns: "100px 1fr 140px", gap: "20px", alignItems: "center" }}>
+              <div className="order-card-body" style={{ padding: "20px", display: "grid", gridTemplateColumns: "100px 1fr 140px", gap: "20px", alignItems: "center" }}>
 
                 {/* Image */}
-                <div style={{ width: "90px", height: "90px", borderRadius: "12px", overflow: "hidden", background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: "80px", height: "80px", borderRadius: "12px", overflow: "hidden", background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <img
                     src={card.item.image_url || getProductImage(card.item)}
                     alt={card.item.product_name}
@@ -2713,7 +2714,7 @@ function Orders({ setCart }) {
                 </div>
 
                 {/* Price */}
-                <div style={{ textAlign: "right" }}>
+                <div className="order-card-price-block" style={{ textAlign: "right" }}>
                   <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a" }}>
                     ₹{card.totalPrice.toLocaleString("en-IN")}
                   </div>
@@ -2724,7 +2725,7 @@ function Orders({ setCart }) {
               </div>
 
               {/* Timeline Stepper Bar */}
-              <div style={{ padding: "12px 20px", background: "#fafafa", borderTop: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#64748b" }}>
+              <div className="order-card-footer" style={{ padding: "12px 20px", background: "#fafafa", borderTop: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#64748b" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <ShieldCheck size={14} color="#16a34a" />
                   <span>Agent Policy Checks Passed</span>

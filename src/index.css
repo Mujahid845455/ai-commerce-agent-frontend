@@ -3693,3 +3693,27 @@ body {
     gap: 6px;
   }
 }
+
+/* =========================================================
+   LOGIN RESPONSIVE MEDIA QUERIES
+========================================================= */
+@media (max-width: 768px) {
+  .login-responsive-container {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 8px 0 !important;
+  }
+  .login-showcase-panel {
+    padding: 12px 4px !important;
+  }
+  .login-card-section {
+    padding: 24px 18px !important;
+    border-radius: 20px !important;
+  }
+  .login-hero-heading {
+    font-size: 28px !important;
+  }
+  .login-demo-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -5387,18 +5387,19 @@ function LoginPage() {
       />
 
       <div
+        className="login-responsive-container"
         style={{
           width: "100%",
           maxWidth: "1160px",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
           gap: "32px",
           alignItems: "center",
           zIndex: 1,
         }}
       >
         {/* LEFT PANEL: APP SHOWCASE & HERO HIGHLIGHTS */}
-        <div style={{ padding: "16px 8px" }}>
+        <div className="login-showcase-panel" style={{ padding: "16px 8px" }}>
           {/* Tag Pill */}
           <div
             style={{
@@ -5421,8 +5422,9 @@ function LoginPage() {
           </div>
 
           <h1
+            className="login-hero-heading"
             style={{
-              fontSize: "clamp(32px, 4vw, 48px)",
+              fontSize: "clamp(28px, 4vw, 48px)",
               fontWeight: 800,
               lineHeight: 1.15,
               letterSpacing: "-0.5px",
@@ -5614,6 +5616,7 @@ function LoginPage() {
 
         {/* RIGHT PANEL: SLEEK LOGIN FORM CARD */}
         <section
+          className="login-card-section"
           style={{
             background: "#ffffff",
             border: "1px solid #e2e8f0",
@@ -5660,7 +5663,7 @@ function LoginPage() {
               <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 8, letterSpacing: "0.5px" }}>
                 1-CLICK DEMO CREDENTIALS:
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              <div className="login-demo-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                 <button
                   type="button"
                   onClick={() => {

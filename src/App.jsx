@@ -2739,6 +2739,7 @@ function MerchantCopilot() {
   return (
     <>
       <button
+        className="merchant-copilot-btn"
         onClick={() => setOpen(!open)}
         style={{
           position: "fixed",
@@ -2764,12 +2765,15 @@ function MerchantCopilot() {
 
       {open && (
         <div
+          className="merchant-copilot-drawer"
           style={{
             position: "fixed",
             bottom: 80,
             right: 24,
             width: 360,
+            maxWidth: "calc(100vw - 32px)",
             height: 480,
+            maxHeight: "calc(100vh - 100px)",
             background: "white",
             borderRadius: 20,
             boxShadow: "0 20px 50px rgba(0,0,0,0.2)",

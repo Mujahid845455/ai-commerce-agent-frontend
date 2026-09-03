@@ -3854,4 +3854,10 @@ body {
   .topbar-right {
     gap: 6px !important;
   }
+
+  /* Hide main-nav (.nav-item) in Mobile View since all pages are in User Avatar Dropdown */
+  .main-nav,
+  .nav-item {
+    display: none !important;
+  }
 }

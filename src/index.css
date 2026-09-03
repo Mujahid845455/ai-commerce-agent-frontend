@@ -3779,4 +3779,79 @@ body {
     position: static !important;
     top: auto !important;
   }
+
+  /* Mobile Topbar Elements Resizing & Security Icon Fix */
+  .topbar {
+    height: 56px !important;
+    padding: 0 10px !important;
+    gap: 6px !important;
+  }
+
+  .brand {
+    min-width: auto !important;
+    gap: 6px !important;
+  }
+
+  .brand-logo {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 7px !important;
+  }
+
+  .brand-logo svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .brand-title {
+    font-size: 14px !important;
+  }
+
+  .brand-caption {
+    display: none !important;
+  }
+
+  .mode-toggle {
+    padding: 2px !important;
+    gap: 1px !important;
+  }
+
+  .mode-toggle button {
+    padding: 4px 7px !important;
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+
+  .security-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    padding: 4px !important;
+    background: rgba(124, 92, 255, 0.1) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(124, 92, 255, 0.2) !important;
+  }
+
+  .security-icon svg {
+    width: 14px !important;
+    height: 14px !important;
+    color: #7c5cff !important;
+  }
+
+  .user-avatar {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+  }
+
+  .environment-pill {
+    display: none !important;
+  }
+
+  .topbar-right {
+    gap: 6px !important;
+  }
 }

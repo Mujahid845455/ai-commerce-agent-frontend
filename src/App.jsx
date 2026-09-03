@@ -5946,16 +5946,17 @@ function LoginPage() {
           </div>
         </div>
 
-        {/* RIGHT PANEL: SLEEK LOGIN FORM CARD */}
+        {/* RIGHT PANEL: SLEEK LOGIN FORM CARD (MATCHING DARK SHOWCASE BACKGROUND) */}
         <section
           className="login-card-section"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e2e8f0",
+            background: "rgba(15, 23, 42, 0.75)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
             borderRadius: "28px",
             padding: "36px 32px",
-            boxShadow: "0 25px 70px rgba(0,0,0,0.35)",
-            color: "#0f172a",
+            boxShadow: "0 25px 70px rgba(0,0,0,0.5)",
+            color: "#f8fafc",
           }}
         >
           <div
@@ -5970,29 +5971,29 @@ function LoginPage() {
               <Sparkles size={18} />
             </div>
             <div>
-              <div className="brand-title">
-                Agent<span>Pay</span>
+              <div className="brand-title" style={{ color: "#ffffff" }}>
+                Agent<span style={{ color: "#60a5fa" }}>Pay</span>
               </div>
-              <div className="brand-caption">AI commerce infrastructure</div>
+              <div className="brand-caption" style={{ color: "#94a3b8" }}>AI commerce infrastructure</div>
             </div>
           </div>
 
-          <div className="section-kicker" style={{ color: "#7c5cff", fontWeight: 700, fontSize: "11px", letterSpacing: "1px", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <ShieldCheck size={14} color="#7c5cff" />
+          <div className="section-kicker" style={{ color: "#c084fc", fontWeight: 700, fontSize: "11px", letterSpacing: "1px", display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+            <ShieldCheck size={14} color="#c084fc" />
             SECURE SIGN IN
           </div>
 
-          <h2 style={{ margin: "0 0 6px 0", fontSize: "24px", fontWeight: 800, color: "#0f172a" }}>
+          <h2 style={{ margin: "0 0 6px 0", fontSize: "24px", fontWeight: 800, color: "#ffffff" }}>
             Welcome back.
           </h2>
-          <p style={{ marginBottom: 24, color: "#64748b", fontSize: "14px", lineHeight: 1.5 }}>
+          <p style={{ marginBottom: 24, color: "#94a3b8", fontSize: "14px", lineHeight: 1.5 }}>
             Sign in to continue to your AgentPay AI commerce workspace.
           </p>
 
           <form onSubmit={handleLogin}>
             {/* Quick Demo Login Fill Buttons */}
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#64748b", marginBottom: 8, letterSpacing: "0.5px" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", marginBottom: 8, letterSpacing: "0.5px" }}>
                 1-CLICK DEMO CREDENTIALS:
               </div>
               <div className="login-demo-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
@@ -6007,9 +6008,9 @@ function LoginPage() {
                     fontSize: 12,
                     fontWeight: 700,
                     borderRadius: 12,
-                    border: "1px solid #cbd5e1",
-                    background: "#f8fafc",
-                    color: "#1e293b",
+                    border: "1px solid rgba(255, 255, 255, 0.12)",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    color: "#f8fafc",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
@@ -6018,7 +6019,7 @@ function LoginPage() {
                     transition: "all 0.2s ease"
                   }}
                 >
-                  <User size={14} color="#7c5cff" />
+                  <User size={14} color="#c084fc" />
                   Demo Customer
                 </button>
                 <button
@@ -6032,9 +6033,9 @@ function LoginPage() {
                     fontSize: 12,
                     fontWeight: 700,
                     borderRadius: 12,
-                    border: "1px solid #cbd5e1",
-                    background: "#f8fafc",
-                    color: "#1e293b",
+                    border: "1px solid rgba(255, 255, 255, 0.12)",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    color: "#f8fafc",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
@@ -6043,7 +6044,7 @@ function LoginPage() {
                     transition: "all 0.2s ease"
                   }}
                 >
-                  <ShoppingBag size={14} color="#2563eb" />
+                  <ShoppingBag size={14} color="#60a5fa" />
                   Demo Merchant
                 </button>
               </div>
@@ -6055,7 +6056,7 @@ function LoginPage() {
                 fontSize: 13,
                 fontWeight: 700,
                 marginBottom: 6,
-                color: "#1e293b",
+                color: "#cbd5e1",
               }}
             >
               Email
@@ -6070,13 +6071,13 @@ function LoginPage() {
                 width: "100%",
                 boxSizing: "border-box",
                 padding: "12px 14px",
-                border: "1px solid #cbd5e1",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
                 borderRadius: 12,
                 marginBottom: 16,
                 outline: "none",
                 fontSize: "14px",
-                color: "#0f172a",
-                background: "#f8fafc",
+                color: "#ffffff",
+                background: "rgba(255, 255, 255, 0.05)",
               }}
             />
 
@@ -6086,7 +6087,7 @@ function LoginPage() {
                 fontSize: 13,
                 fontWeight: 700,
                 marginBottom: 6,
-                color: "#1e293b",
+                color: "#cbd5e1",
               }}
             >
               Password
@@ -6101,13 +6102,13 @@ function LoginPage() {
                 width: "100%",
                 boxSizing: "border-box",
                 padding: "12px 14px",
-                border: "1px solid #cbd5e1",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
                 borderRadius: 12,
                 marginBottom: 16,
                 outline: "none",
                 fontSize: "14px",
-                color: "#0f172a",
-                background: "#f8fafc",
+                color: "#ffffff",
+                background: "rgba(255, 255, 255, 0.05)",
               }}
             />
 

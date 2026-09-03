@@ -3959,6 +3959,7 @@ function MerchantProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -4008,9 +4009,9 @@ function MerchantProducts() {
       setFormData({
         name: product.name,
         description: product.description || "",
-        category: product.category,
-        price: product.price_paise / 100,
-        stock: product.stock_quantity,
+        category: product.category || "",
+        price: (product.price_paise / 100).toString(),
+        stock: product.stock_quantity.toString(),
         color: product.attributes?.color || "",
         brand: product.attributes?.brand || "",
         size: product.attributes?.size || "",
@@ -4018,7 +4019,14 @@ function MerchantProducts() {
     } else {
       setEditingId(null);
       setFormData({
-        name: "", description: "", category: "", price: "", stock: "", color: "", brand: "", size: ""
+        name: "",
+        description: "",
+        category: "",
+        price: "",
+        stock: "",
+        color: "",
+        brand: "",
+        size: ""
       });
     }
     setShowModal(true);
@@ -4029,21 +4037,33 @@ function MerchantProducts() {
     try {
       setSubmitting(true);
 
+      const pricePaise = Math.round(parseFloat(formData.price) * 100);
+      const stockQty = parseInt(formData.stock, 10);
+
+      if (isNaN(pricePaise) || pricePaise < 0) {
+        alert("Please enter a valid price.");
+        return;
+      }
+      if (isNaN(stockQty) || stockQty < 0) {
+        alert("Please enter a valid stock quantity.");
+        return;
+      }
+
       const payload = {
         name: formData.name,
         description: formData.description,
         category: formData.category,
-        price_paise: Math.round(Number(formData.price) * 100),
+        price_paise: pricePaise,
         currency: "INR",
-        stock_quantity: Number(formData.stock),
+        stock_quantity: stockQty,
         attributes: {
           color: formData.color,
           brand: formData.brand,
-          size: formData.size
-        }
+          size: formData.size,
+        },
       };
 
-      let newProd = null;
+      let newProd;
       try {
         if (editingId) {
           newProd = await api.updateProduct(editingId, payload);
@@ -4054,14 +4074,8 @@ function MerchantProducts() {
         console.warn("Backend save notice, updating product locally:", apiErr);
         newProd = {
           id: editingId || "prod_" + Date.now(),
-          name: payload.name,
-          description: payload.description,
-          category: payload.category,
-          price_paise: payload.price_paise,
-          currency: "INR",
-          stock_quantity: payload.stock_quantity,
-          is_active: true,
-          attributes: payload.attributes,
+          ...payload,
+          is_active: true
         };
       }
 
@@ -4090,71 +4104,259 @@ function MerchantProducts() {
     }
   }
 
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products;
+    const q = searchQuery.toLowerCase();
+    return products.filter(p =>
+      (p.name || "").toLowerCase().includes(q) ||
+      (p.category || "").toLowerCase().includes(q) ||
+      (p.attributes?.brand || "").toLowerCase().includes(q)
+    );
+  }, [products, searchQuery]);
+
   return (
-    <div className="dashboard-content" style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 700 }}>Products Catalog</h2>
+    <div className="dashboard-content" style={{ padding: '24px 16px', maxWidth: '1240px', margin: '0 auto', fontFamily: "Inter, system-ui, sans-serif" }}>
+      {/* Catalog Header & Controls Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 14 }}>
+        <div>
+          <h2 style={{ fontSize: 26, fontWeight: 800, color: "#0f172a", margin: "0 0 4px" }}>Products Catalog</h2>
+          <p style={{ margin: 0, fontSize: 13, color: "#64748b" }}>Manage live inventory, images, prices, and merchant stock levels.</p>
+        </div>
+
         <button
           className="primary-button"
           onClick={() => handleOpenModal()}
-          style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 6 }}
+          style={{ padding: '10px 18px', display: 'flex', alignItems: 'center', gap: 8, borderRadius: 12, fontWeight: 700, fontSize: 13 }}
         >
-          <Plus size={16} /> Add Product
+          <Plus size={16} /> Add New Product
         </button>
       </div>
 
-      {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
+      {/* Catalog Search Bar */}
+      <div style={{ background: "#ffffff", padding: "12px 16px", borderRadius: "14px", border: "1px solid #e2e8f0", boxShadow: "0 2px 8px rgba(0,0,0,0.03)", marginBottom: 24, display: "flex", alignItems: "center", gap: 10 }}>
+        <Search size={18} color="#64748b" />
+        <input
+          type="text"
+          placeholder="Search products by title, category, or brand..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ border: "none", background: "transparent", outline: "none", fontSize: "14px", width: "100%", color: "#0f172a" }}
+        />
+      </div>
 
+      {error && <div style={{ color: '#ef4444', marginBottom: 16, padding: "10px", background: "#fef2f2", borderRadius: 8, border: "1px solid #fecaca", fontSize: 13 }}>{error}</div>}
+
+      {/* YouTube Video-Style Products Grid */}
       {loading ? (
-        <div>Loading catalog...</div>
+        <div style={{ padding: 40, textAlign: "center", color: "#64748b" }}>Loading product catalog...</div>
+      ) : filteredProducts.length === 0 ? (
+        <div style={{ padding: 40, textAlign: "center", color: "#64748b", background: "#ffffff", borderRadius: 16, border: "1px solid #e2e8f0" }}>
+          No products match "{searchQuery}". Click "Add New Product" to create one!
+        </div>
       ) : (
-        <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: 13, textTransform: 'uppercase' }}>
-                <th style={{ padding: '12px 16px', fontWeight: 600 }}>Name</th>
-                <th style={{ padding: '12px 16px', fontWeight: 600 }}>Category</th>
-                <th style={{ padding: '12px 16px', fontWeight: 600 }}>Price (₹)</th>
-                <th style={{ padding: '12px 16px', fontWeight: 600 }}>Stock</th>
-                <th style={{ padding: '12px 16px', fontWeight: 600 }}>Status</th>
-                <th style={{ padding: '12px 16px', fontWeight: 600, textAlign: 'right' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map(p => (
-                <tr key={p.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '12px 16px', fontWeight: 500 }}>{p.name}</td>
-                  <td style={{ padding: '12px 16px', color: '#64748b' }}>{p.category}</td>
-                  <td style={{ padding: '12px 16px', color: '#10b981', fontWeight: 600 }}>
-                    ₹{p.price_paise / 100}
-                  </td>
-                  <td style={{ padding: '12px 16px' }}>{p.stock_quantity}</td>
-                  <td style={{ padding: '12px 16px' }}>
-                    {p.is_active ?
-                      <span style={{ padding: '4px 8px', background: '#dcfce7', color: '#166534', borderRadius: 4, fontSize: 12, fontWeight: 600 }}>Active</span>
-                      :
-                      <span style={{ padding: '4px 8px', background: '#fee2e2', color: '#991b1b', borderRadius: 4, fontSize: 12, fontWeight: 600 }}>Inactive</span>
-                    }
-                  </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right', display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                    <button onClick={() => handleOpenModal(p)} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer' }} title="Edit">
-                      <Edit2 size={16} />
+        <div
+          className="product-catalog-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "24px",
+          }}
+        >
+          {filteredProducts.map((p) => {
+            const imgUrl = getProductImage(p);
+            const priceInr = Math.round((p.price_paise || 0) / 100);
+            const brand = p.attributes?.brand || p.brand || "AgentPay Select";
+            const color = p.attributes?.color;
+            const size = p.attributes?.size;
+
+            return (
+              <div
+                key={p.id}
+                className="yt-product-card"
+                style={{
+                  background: "#ffffff",
+                  borderRadius: "18px",
+                  border: "1px solid #e2e8f0",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                  position: "relative",
+                }}
+              >
+                {/* YouTube Video-Style Thumbnail Container */}
+                <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", overflow: "hidden", background: "#0f172a" }}>
+                  <img
+                    src={imgUrl}
+                    alt={p.name}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      transition: "transform 0.3s ease",
+                    }}
+                  />
+
+                  {/* Status Overlay Badge (Top Left) */}
+                  <div style={{ position: "absolute", top: 12, left: 12, zIndex: 2 }}>
+                    <span
+                      style={{
+                        padding: "4px 10px",
+                        borderRadius: "20px",
+                        fontSize: "10px",
+                        fontWeight: "800",
+                        letterSpacing: "0.5px",
+                        background: p.is_active ? "rgba(16, 185, 129, 0.92)" : "rgba(239, 68, 68, 0.92)",
+                        color: "white",
+                        backdropFilter: "blur(6px)",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      {p.is_active ? "● ACTIVE CATALOG" : "○ INACTIVE"}
+                    </span>
+                  </div>
+
+                  {/* Price Tag Badge (YouTube Video Duration Style - Bottom Right) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 12,
+                      right: 12,
+                      background: "rgba(15, 23, 42, 0.9)",
+                      color: "#34d399",
+                      padding: "4px 10px",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "800",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    ₹{priceInr.toLocaleString("en-IN")}
+                  </div>
+                </div>
+
+                {/* Card Body Details Section */}
+                <div style={{ padding: "16px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div>
+                    {/* Category Pill & Brand Name Tag */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
+                      <span style={{ fontSize: "11px", fontWeight: "800", color: "#7c5cff", background: "rgba(124, 92, 255, 0.08)", padding: "2px 8px", borderRadius: "6px" }}>
+                        {p.category || "General"}
+                      </span>
+                      <span style={{ fontSize: "11px", fontWeight: "600", color: "#64748b" }}>
+                        by {brand}
+                      </span>
+                    </div>
+
+                    {/* Product Name Title */}
+                    <h3
+                      style={{
+                        margin: "0 0 8px 0",
+                        fontSize: "15px",
+                        fontWeight: 700,
+                        color: "#0f172a",
+                        lineHeight: 1.35,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {p.name}
+                    </h3>
+
+                    {/* Stock & Attributes Tags */}
+                    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "14px" }}>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: "700",
+                          padding: "3px 8px",
+                          borderRadius: "6px",
+                          background: (p.stock_quantity || 0) > 5 ? "#f0fdf4" : "#fff7ed",
+                          color: (p.stock_quantity || 0) > 5 ? "#166534" : "#c2410c",
+                          border: `1px solid ${(p.stock_quantity || 0) > 5 ? "#bbf7d0" : "#ffedd5"}`,
+                        }}
+                      >
+                        📦 Stock: {p.stock_quantity || 0} units
+                      </span>
+
+                      {color && (
+                        <span style={{ fontSize: "11px", color: "#475569", background: "#f1f5f9", padding: "3px 8px", borderRadius: "6px", fontWeight: "600" }}>
+                          🎨 {color}
+                        </span>
+                      )}
+
+                      {size && (
+                        <span style={{ fontSize: "11px", color: "#475569", background: "#f1f5f9", padding: "3px 8px", borderRadius: "6px", fontWeight: "600" }}>
+                          📏 Size: {size}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions Bar (Edit / Remove) */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingTop: "12px",
+                      borderTop: "1px solid #f1f5f9",
+                    }}
+                  >
+                    <button
+                      onClick={() => handleOpenModal(p)}
+                      style={{
+                        padding: "6px 12px",
+                        background: "#f8fafc",
+                        border: "1px solid #cbd5e1",
+                        borderRadius: "8px",
+                        color: "#334155",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      <Edit2 size={14} color="#7c5cff" /> Edit Product
                     </button>
+
                     {p.is_active && (
-                      <button onClick={() => handleDeactivate(p.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Deactivate">
-                        <Trash2 size={16} />
+                      <button
+                        onClick={() => handleDeactivate(p.id)}
+                        style={{
+                          padding: "6px 10px",
+                          background: "#fef2f2",
+                          border: "1px solid #fecaca",
+                          borderRadius: "8px",
+                          color: "#ef4444",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                        title="Remove Product"
+                      >
+                        <Trash2 size={14} /> Remove
                       </button>
                     )}
-                  </td>
-                </tr>
-              ))}
-              {products.length === 0 && (
-                <tr>
-                  <td colSpan="6" style={{ padding: 24, textAlign: 'center', color: '#64748b' }}>No products found. Add some to start selling!</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 

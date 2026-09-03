@@ -3860,4 +3860,20 @@ body {
   .nav-item {
     display: none !important;
   }
+
+  .product-catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+/* YouTube Video-Style Product Card Hover Animations */
+.yt-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1) !important;
+  border-color: #cbd5e1 !important;
+}
+
+.yt-product-card:hover img {
+  transform: scale(1.06) !important;
 }

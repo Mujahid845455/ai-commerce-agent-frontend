@@ -3802,8 +3802,29 @@ function AuditTrail() {
                       transition: "all 0.15s ease",
                     }}
                   >
-                    <div className="audit-row-top">
-                      <strong style={{ fontSize: "13px", color: "#0f172a", fontWeight: "700" }}>{item.event}</strong>
+                    {/* Col 1: Time */}
+                    <span className="audit-col-time" style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>
+                      {item.time}
+                    </span>
+
+                    {/* Col 2: Event Name */}
+                    <strong className="audit-col-event" style={{ fontSize: "13px", color: "#0f172a", fontWeight: "700", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {item.event}
+                    </strong>
+
+                    {/* Col 3: Actor */}
+                    <span className="audit-col-actor" style={{ fontSize: "12px", color: item.actor === "AI Agent" ? "#7c5cff" : item.actor === "Customer" ? "#2563eb" : "#64748b", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                      {item.actor === "AI Agent" ? <Bot size={13} /> : item.actor === "Customer" ? <User size={13} /> : <ShieldCheck size={13} />}
+                      {item.actor}
+                    </span>
+
+                    {/* Col 4: Value */}
+                    <span className="audit-col-value" style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>
+                      {item.value}
+                    </span>
+
+                    {/* Col 5: Status */}
+                    <div className="audit-col-status" style={{ textAlign: "right" }}>
                       <span
                         style={{
                           display: "inline-block",
@@ -3818,15 +3839,6 @@ function AuditTrail() {
                       >
                         {item.status}
                       </span>
-                    </div>
-
-                    <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-                      <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>{item.time}</span>
-                      <span style={{ fontSize: "12px", color: item.actor === "AI Agent" ? "#7c5cff" : item.actor === "Customer" ? "#2563eb" : "#64748b", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                        {item.actor === "AI Agent" ? <Bot size={13} /> : item.actor === "Customer" ? <User size={13} /> : <ShieldCheck size={13} />}
-                        {item.actor}
-                      </span>
-                      <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>{item.value}</span>
                     </div>
                   </button>
                 );

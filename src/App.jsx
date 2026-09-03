@@ -3548,7 +3548,7 @@ function AuditTrail() {
   }
 
   return (
-    <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "32px 20px", fontFamily: "Inter, system-ui, sans-serif" }}>
+    <div className="audit-responsive-container" style={{ maxWidth: "1240px", margin: "0 auto", padding: "32px 20px", fontFamily: "Inter, system-ui, sans-serif" }}>
 
       {/* Header & KPI Summary Bar */}
       <div style={{ marginBottom: "28px" }}>
@@ -3560,7 +3560,7 @@ function AuditTrail() {
       </div>
 
       {/* Stats Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+      <div className="audit-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "24px" }}>
         <div style={{ background: "white", padding: "18px 20px", borderRadius: "14px", border: "1px solid #e2e8f0", boxShadow: "0 2px 8px rgba(0,0,0,0.03)" }}>
           <span style={{ fontSize: "11px", color: "#64748b", fontWeight: "700", textTransform: "uppercase" }}>TOTAL LOGGED EVENTS</span>
           <h3 style={{ fontSize: "26px", fontWeight: "800", color: "#0f172a", margin: "4px 0 0" }}>{logs.length || 20}</h3>
@@ -3583,10 +3583,10 @@ function AuditTrail() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div style={{ background: "white", padding: "16px 20px", borderRadius: "16px", border: "1px solid #e2e8f0", boxShadow: "0 4px 14px rgba(0,0,0,0.03)", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+      <div className="audit-filter-bar" style={{ background: "white", padding: "16px 20px", borderRadius: "16px", border: "1px solid #e2e8f0", boxShadow: "0 4px 14px rgba(0,0,0,0.03)", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
 
         {/* Search */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "#f8fafc", padding: "10px 16px", borderRadius: "10px", border: "1px solid #cbd5e1", flex: 1, minWidth: "280px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "#f8fafc", padding: "10px 16px", borderRadius: "10px", border: "1px solid #cbd5e1", flex: 1, minWidth: "240px" }}>
           <Search size={16} color="#64748b" />
           <input
             type="text"
@@ -3601,7 +3601,7 @@ function AuditTrail() {
         </div>
 
         {/* Filter Chips */}
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="audit-filter-chips" style={{ display: "flex", gap: "8px" }}>
           {[
             { key: "ALL", label: "All Events" },
             { key: "AI", label: "AI Checkouts" },
@@ -3622,6 +3622,7 @@ function AuditTrail() {
                 border: "none",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
+                whiteSpace: "nowrap",
                 background: activeFilter === f.key ? "#7c5cff" : "#f1f5f9",
                 color: activeFilter === f.key ? "white" : "#475569",
               }}
@@ -3633,11 +3634,11 @@ function AuditTrail() {
       </div>
 
       {/* Main Split Grid: Table Left + Inspector Right */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "24px", alignItems: "start" }}>
+      <div className="audit-main-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: "24px", alignItems: "start" }}>
 
         {/* Table Container */}
         <div style={{ background: "white", borderRadius: "16px", border: "1px solid #e2e8f0", boxShadow: "0 4px 16px rgba(0,0,0,0.03)", overflow: "hidden" }}>
-          <div style={{ padding: "14px 20px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0", display: "grid", gridTemplateColumns: "90px 1.4fr 110px 90px 110px", gap: "12px", fontSize: "11px", fontWeight: "800", color: "#64748b", textTransform: "uppercase" }}>
+          <div className="audit-table-header" style={{ padding: "14px 20px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0", display: "grid", gridTemplateColumns: "90px 1.4fr 110px 90px 110px", gap: "12px", fontSize: "11px", fontWeight: "800", color: "#64748b", textTransform: "uppercase" }}>
             <span>Time</span>
             <span>Event Name</span>
             <span>Actor</span>
@@ -3660,6 +3661,7 @@ function AuditTrail() {
                   <button
                     key={item.id + idx}
                     onClick={() => setSelected(idx)}
+                    className="audit-row-item"
                     style={{
                       width: "100%",
                       padding: "14px 20px",
@@ -3676,18 +3678,8 @@ function AuditTrail() {
                       transition: "all 0.15s ease",
                     }}
                   >
-                    <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>{item.time}</span>
-
-                    <strong style={{ fontSize: "13px", color: "#0f172a", fontWeight: "700" }}>{item.event}</strong>
-
-                    <span style={{ fontSize: "12px", color: item.actor === "AI Agent" ? "#7c5cff" : item.actor === "Customer" ? "#2563eb" : "#64748b", fontWeight: "600", display: "flex", alignItems: "center", gap: "4px" }}>
-                      {item.actor === "AI Agent" ? <Bot size={13} /> : item.actor === "Customer" ? <User size={13} /> : <ShieldCheck size={13} />}
-                      {item.actor}
-                    </span>
-
-                    <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>{item.value}</span>
-
-                    <div style={{ textAlign: "right" }}>
+                    <div className="audit-row-top">
+                      <strong style={{ fontSize: "13px", color: "#0f172a", fontWeight: "700" }}>{item.event}</strong>
                       <span
                         style={{
                           display: "inline-block",
@@ -3703,6 +3695,15 @@ function AuditTrail() {
                         {item.status}
                       </span>
                     </div>
+
+                    <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                      <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>{item.time}</span>
+                      <span style={{ fontSize: "12px", color: item.actor === "AI Agent" ? "#7c5cff" : item.actor === "Customer" ? "#2563eb" : "#64748b", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                        {item.actor === "AI Agent" ? <Bot size={13} /> : item.actor === "Customer" ? <User size={13} /> : <ShieldCheck size={13} />}
+                        {item.actor}
+                      </span>
+                      <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>{item.value}</span>
+                    </div>
                   </button>
                 );
               })
@@ -3713,6 +3714,7 @@ function AuditTrail() {
         {/* Right Inspector Panel Card */}
         {activeLog && (
           <div
+            className="audit-inspector-panel"
             style={{
               background: "white",
               borderRadius: "16px",

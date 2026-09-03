@@ -611,24 +611,83 @@ function AIShopping({ cart, setCart }) {
         setAgentSessionId(data.session_id);
       }
 
-      const responseText = typeof data === "string" ? data : (data.message || "I found products matching your request.");
+      // Check saved policy configuration & rules from localStorage
+      const policyConfig = (() => {
+        try {
+          return JSON.parse(localStorage.getItem("agentpay_policy_config") || "null");
+        } catch {
+          return null;
+        }
+      })();
+
+      const configuredCap = Number(policyConfig?.maxLimit || 5000);
+      const configuredRules = policyConfig?.rules || [];
+
+      // Calculate intent total or products total
+      let rawCheckoutIntent = data.checkout_intent || null;
+      let orderTotalInr = 0;
+
+      if (rawCheckoutIntent) {
+        orderTotalInr = (rawCheckoutIntent.amount_paise || rawCheckoutIntent.total_amount_paise || 0) / 100;
+      } else if (Array.isArray(data.products) && data.products.length > 0) {
+        orderTotalInr = data.products.reduce((acc, p) => acc + (Number(p.price) || 0), 0);
+      }
+
+      const isPolicyViolation = orderTotalInr > configuredCap;
+
+      let responseText = typeof data === "string" ? data : (data.message || "I found products matching your request.");
+
+      // Check custom rule triggers
+      const matchedRule = configuredRules.find((r) => {
+        if (!r.trigger || r.status === "Paused") return false;
+        const triggerKeyword = r.trigger.toLowerCase().replace("when ", "").replace(" selected", "").trim();
+        return triggerKeyword.length > 2 && message.toLowerCase().includes(triggerKeyword);
+      });
+
+      if (matchedRule && !isPolicyViolation) {
+        responseText += `\n\n💡 **Agent Rule Triggered (${matchedRule.trigger}):**\n↳ ${matchedRule.action}`;
+      }
+
+      if (isPolicyViolation) {
+        responseText = `🛑 **ORDER BLOCKED BY MERCHANT SAFETY POLICY**\n\nYour requested purchase total of **₹${orderTotalInr.toLocaleString("en-IN")}** exceeds your configured **Max Single Transaction Limit (Cap: ₹${configuredCap.toLocaleString("en-IN")})**.\n\n- **Configured Policy Cap:** ₹${configuredCap.toLocaleString("en-IN")}\n- **Attempted Order Total:** ₹${orderTotalInr.toLocaleString("en-IN")}\n- **Enforcement Status:** ❌ 403 Forbidden (Blocked by Safety Policy Rule)\n\n*To approve higher transaction amounts, update your spend limit in [Merchant Policies](/merchant/policies).*`;
+
+        // Log Policy Blocked Event to System Audit Trail
+        try {
+          const auditLogs = JSON.parse(localStorage.getItem("agentpay_audit_events") || "[]");
+          const newBlockEvent = {
+            id: "evt_block_" + Date.now().toString(36),
+            event: "POLICY_LIMIT_BLOCKED",
+            actor: "AI Agent",
+            time: new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+            value: `₹${orderTotalInr.toLocaleString("en-IN")}`,
+            status: "BLOCKED_BY_LIMIT",
+            sessionId: data.session_id || ("sess_" + Date.now().toString(36)),
+            reason: `Order total ₹${orderTotalInr.toLocaleString("en-IN")} exceeds configured limit ₹${configuredCap.toLocaleString("en-IN")}`,
+            inputPrompt: message,
+          };
+          localStorage.setItem("agentpay_audit_events", JSON.stringify([newBlockEvent, ...auditLogs]));
+        } catch (e) {
+          console.warn("Audit log notice:", e);
+        }
+      }
 
       const agentMsg = {
         id: "a_" + Date.now(),
         sender: "agent",
         text: responseText,
-        checkoutIntent: data.checkout_intent || null,
+        checkoutIntent: isPolicyViolation ? null : rawCheckoutIntent,
         query: message,
-        productsCount: data.products?.length || 0,
+        productsCount: isPolicyViolation ? 0 : (data.products?.length || 0),
+        isPolicyBlocked: isPolicyViolation,
       };
 
       setChatMessages((prev) => [...prev, agentMsg]);
       setAgentMessage(responseText);
 
-      if (data.checkout_intent) {
-        setAgentCheckoutIntent(data.checkout_intent);
+      if (rawCheckoutIntent && !isPolicyViolation) {
+        setAgentCheckoutIntent(rawCheckoutIntent);
         setTimeout(() => {
-          handleAiApproveAndPay(data.checkout_intent);
+          handleAiApproveAndPay(rawCheckoutIntent);
         }, 300);
       }
 
@@ -5170,19 +5229,28 @@ function MerchantPolicies() {
     budget: 20000,
   });
 
-  const [maxLimit, setMaxLimit] = useState(5000);
-  const [upsellStrategy, setUpsellStrategy] = useState("Balanced");
-  const [maxDiscount, setMaxDiscount] = useState(10);
+  // Load stored policy configuration
+  const storedPolicy = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("agentpay_policy_config") || "null");
+    } catch {
+      return null;
+    }
+  })();
+
+  const [maxLimit, setMaxLimit] = useState(storedPolicy?.maxLimit || 5000);
+  const [upsellStrategy, setUpsellStrategy] = useState(storedPolicy?.upsellStrategy || "Balanced");
+  const [maxDiscount, setMaxDiscount] = useState(storedPolicy?.maxDiscount || 10);
   const [savedConfig, setSavedConfig] = useState(false);
 
   const [newTrigger, setNewTrigger] = useState("");
   const [newAction, setNewAction] = useState("");
 
-  const [rules, setRules] = useState([
+  const [rules, setRules] = useState(storedPolicy?.rules || [
     { id: 1, trigger: "When Footwear selected", action: "Suggest Sports Socks or Hydration Bottle", status: "Active" },
     { id: 2, trigger: "When Laptop selected", action: "Suggest Laptop Bag or Wireless Mouse", status: "Active" },
     { id: 3, trigger: "When Smartphone selected", action: "Suggest Protective Case or Wireless Earbuds", status: "Active" },
-    { id: 4, trigger: "Max Transaction Cap", action: `Reject any AI order > ₹${maxLimit.toLocaleString("en-IN")}`, status: "Strict Enforcement" },
+    { id: 4, trigger: "Max Transaction Cap", action: "Reject any AI order exceeding configured limit", status: "Strict Enforcement" },
     { id: 5, trigger: "Low Stock Alert", action: "Prioritize clearing stock <= 5 items", status: "Active" },
   ]);
 
@@ -5233,25 +5301,87 @@ function MerchantPolicies() {
 
   function handleSaveBehavior(e) {
     e.preventDefault();
+
+    const policyPayload = {
+      maxLimit,
+      upsellStrategy,
+      maxDiscount,
+      rules,
+      updatedAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem("agentpay_policy_config", JSON.stringify(policyPayload));
+
+    // Also attempt backend update
+    try {
+      api.post("/policies/update", policyPayload).catch(() => {});
+    } catch {
+      // client-side fallback
+    }
+
     setSavedConfig(true);
-    setTimeout(() => setSavedConfig(false), 3000);
+    setTimeout(() => setSavedConfig(false), 4000);
   }
 
   function handleAddRule(e) {
     e.preventDefault();
     if (!newTrigger.trim() || !newAction.trim()) return;
 
-    setRules((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        trigger: newTrigger.trim(),
-        action: newAction.trim(),
-        status: "Active",
-      },
-    ]);
+    const newRuleItem = {
+      id: Date.now(),
+      trigger: newTrigger.trim(),
+      action: newAction.trim(),
+      status: "Active",
+    };
+
+    const updatedRules = [...rules, newRuleItem];
+    setRules(updatedRules);
     setNewTrigger("");
     setNewAction("");
+
+    // Auto-persist rule additions
+    const policyPayload = {
+      maxLimit,
+      upsellStrategy,
+      maxDiscount,
+      rules: updatedRules,
+      updatedAt: new Date().toISOString(),
+    };
+    localStorage.setItem("agentpay_policy_config", JSON.stringify(policyPayload));
+  }
+
+  function handleDeleteRule(ruleId) {
+    const updatedRules = rules.filter((r) => r.id !== ruleId);
+    setRules(updatedRules);
+
+    const policyPayload = {
+      maxLimit,
+      upsellStrategy,
+      maxDiscount,
+      rules: updatedRules,
+      updatedAt: new Date().toISOString(),
+    };
+    localStorage.setItem("agentpay_policy_config", JSON.stringify(policyPayload));
+  }
+
+  function handleToggleRuleStatus(ruleId) {
+    const updatedRules = rules.map((r) => {
+      if (r.id === ruleId) {
+        const nextStatus = r.status === "Active" ? "Paused" : r.status === "Paused" ? "Strict Enforcement" : "Active";
+        return { ...r, status: nextStatus };
+      }
+      return r;
+    });
+    setRules(updatedRules);
+
+    const policyPayload = {
+      maxLimit,
+      upsellStrategy,
+      maxDiscount,
+      rules: updatedRules,
+      updatedAt: new Date().toISOString(),
+    };
+    localStorage.setItem("agentpay_policy_config", JSON.stringify(policyPayload));
   }
 
   return (
@@ -5326,8 +5456,9 @@ function MerchantPolicies() {
       )}
 
       {savedConfig && (
-        <div style={{ padding: '12px 16px', background: '#dcfce7', color: '#15803d', borderRadius: 10, marginBottom: 20, border: '1px solid #bbf7d0', fontSize: 13, fontWeight: 600 }}>
-          ✓ Agent Behavior Configuration updated successfully! Live AI agents will immediately enforce these rules.
+        <div style={{ padding: '14px 18px', background: '#dcfce7', color: '#15803d', borderRadius: 12, marginBottom: 20, border: '1px solid #bbf7d0', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, boxShadow: "0 4px 12px rgba(16, 185, 129, 0.12)" }}>
+          <CheckCircle size={18} color="#16a34a" />
+          <span>✓ Agent Behavior Configuration saved successfully! Max Cap: <strong>₹{maxLimit.toLocaleString("en-IN")}</strong>. Live AI agents will immediately enforce these rules.</span>
         </div>
       )}
 
@@ -5339,23 +5470,39 @@ function MerchantPolicies() {
         <p style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>Control how aggressively the AI agent searches products, pitches upsells, and caps transaction amounts.</p>
 
         <form onSubmit={handleSaveBehavior} className="policies-form-grid" style={{ marginTop: 20 }}>
+          {/* DUAL EDITABLE MAX LIMIT INPUT */}
           <div>
-            <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 6 }}>
-              Max Single Transaction Limit (Cap)
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <label style={{ fontSize: 12, fontWeight: 700, color: '#475569' }}>
+                Max Single Transaction Limit (Cap)
+              </label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: '#2563eb' }}>₹</span>
+                <input
+                  type="number"
+                  min="500"
+                  max="50000"
+                  step="100"
+                  value={maxLimit}
+                  onChange={(e) => setMaxLimit(Math.max(100, Number(e.target.value)))}
+                  style={{ width: "90px", padding: "4px 8px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "13px", fontWeight: "800", color: "#2563eb", outline: "none" }}
+                />
+              </div>
+            </div>
+
             <input
               type="range"
               min="1000"
-              max="10000"
+              max="20000"
               step="500"
-              value={maxLimit}
+              value={Math.min(maxLimit, 20000)}
               onChange={(e) => setMaxLimit(Number(e.target.value))}
-              style={{ width: '100%', accentColor: '#7c5cff' }}
+              style={{ width: '100%', accentColor: '#7c5cff', cursor: 'pointer' }}
             />
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginTop: 4, fontWeight: 700, color: '#2563eb' }}>
-              <span>Min: ₹1,000</span>
-              <span>Selected: ₹{maxLimit.toLocaleString("en-IN")}</span>
-              <span>Max: ₹10,000</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, marginTop: 4, fontWeight: 700, color: '#64748b' }}>
+              <span>₹1,000</span>
+              <span style={{ color: '#7c5cff', fontWeight: 800 }}>Active Cap: ₹{maxLimit.toLocaleString("en-IN")}</span>
+              <span>₹20,000</span>
             </div>
           </div>
 
@@ -5394,9 +5541,9 @@ function MerchantPolicies() {
           <div className="policies-form-save">
             <button
               type="submit"
-              style={{ padding: '9px 20px', background: '#0f172a', color: 'white', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', fontSize: 13 }}
+              style={{ padding: '10px 22px', background: 'linear-gradient(135deg, #0f172a, #1e1b4b)', color: 'white', border: 'none', borderRadius: 10, fontWeight: 800, cursor: 'pointer', fontSize: 13, boxShadow: '0 4px 12px rgba(15, 23, 42, 0.25)', display: 'flex', alignItems: 'center', gap: 8 }}
             >
-              Save Agent Behavior Configuration
+              <ShieldCheck size={16} color="#38bdf8" /> Save Agent Behavior Configuration
             </button>
           </div>
         </form>
@@ -5436,38 +5583,57 @@ function MerchantPolicies() {
           </h3>
           <p style={{ fontSize: 13, color: '#64748b' }}>Rules evaluated by the AI model during customer intent analysis.</p>
 
-          <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 200, overflowY: 'auto' }}>
+          <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 220, overflowY: 'auto' }}>
             {rules.map((r) => (
-              <div key={r.id} style={{ padding: 10, border: '1px solid #f1f5f9', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a" }}>{r.trigger}</div>
-                  <div style={{ fontSize: 11, color: '#64748b' }}>↳ {r.action}</div>
+              <div key={r.id} style={{ padding: 10, border: '1px solid #f1f5f9', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.trigger}</div>
+                  <div style={{ fontSize: 11, color: '#64748b', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>↳ {r.action}</div>
                 </div>
-                <span style={{ fontSize: 10, fontWeight: 700, color: r.status.includes("Campaign") ? "#16a34a" : "#2563eb", background: r.status.includes("Campaign") ? "#dcfce7" : "#eef4ff", padding: '2px 6px', borderRadius: 4 }}>{r.status}</span>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleRuleStatus(r.id)}
+                    style={{ fontSize: 10, fontWeight: 700, border: "none", cursor: "pointer", color: r.status.includes("Campaign") ? "#16a34a" : r.status === "Paused" ? "#64748b" : "#2563eb", background: r.status.includes("Campaign") ? "#dcfce7" : r.status === "Paused" ? "#f1f5f9" : "#eef4ff", padding: '3px 8px', borderRadius: 4 }}
+                    title="Click to toggle status"
+                  >
+                    {r.status}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteRule(r.id)}
+                    style={{ background: "transparent", border: "none", cursor: "pointer", padding: "4px" }}
+                    title="Delete rule"
+                  >
+                    <Trash2 size={13} color="#ef4444" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
 
-          <form onSubmit={handleAddRule} className="add-rule-form">
+          <form onSubmit={handleAddRule} className="add-rule-form" style={{ display: "flex", gap: 8, marginTop: 12 }}>
             <input
               type="text"
-              placeholder="When [Trigger]..."
+              placeholder="When [Trigger e.g. Laptop]..."
               value={newTrigger}
               onChange={(e) => setNewTrigger(e.target.value)}
-              style={{ flex: 1, padding: '7px 10px', fontSize: 12, borderRadius: 6, border: '1px solid #cbd5e1' }}
+              style={{ flex: 1, padding: '7px 10px', fontSize: 12, borderRadius: 6, border: '1px solid #cbd5e1', outline: "none" }}
             />
             <input
               type="text"
-              placeholder="Suggest [Action]..."
+              placeholder="Suggest [Action e.g. Free Bag]..."
               value={newAction}
               onChange={(e) => setNewAction(e.target.value)}
-              style={{ flex: 1, padding: '7px 10px', fontSize: 12, borderRadius: 6, border: '1px solid #cbd5e1' }}
+              style={{ flex: 1, padding: '7px 10px', fontSize: 12, borderRadius: 6, border: '1px solid #cbd5e1', outline: "none" }}
             />
             <button
               type="submit"
-              style={{ padding: '7px 12px', background: '#7c5cff', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+              style={{ padding: '7px 14px', background: '#7c5cff', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 12, cursor: 'pointer', whiteSpace: "nowrap" }}
             >
-              Add
+              Add Rule
             </button>
           </form>
         </div>

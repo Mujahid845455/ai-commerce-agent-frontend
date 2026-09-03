@@ -638,15 +638,83 @@ function AIShopping({ cart, setCart }) {
 
       let responseText = typeof data === "string" ? data : (data.message || "I found products matching your request.");
 
-      // Check custom rule triggers
+      // Check custom rule triggers & execute them dynamically
       const matchedRule = configuredRules.find((r) => {
         if (!r.trigger || r.status === "Paused") return false;
         const triggerKeyword = r.trigger.toLowerCase().replace("when ", "").replace(" selected", "").trim();
-        return triggerKeyword.length > 2 && message.toLowerCase().includes(triggerKeyword);
+        return triggerKeyword.length >= 2 && message.toLowerCase().includes(triggerKeyword);
       });
 
+      let addonProducts = [];
+
       if (matchedRule && !isPolicyViolation) {
-        responseText += `\n\n💡 **Agent Rule Triggered (${matchedRule.trigger}):**\n↳ ${matchedRule.action}`;
+        const actionClean = matchedRule.action.replace(/^Suggest\s+/i, "");
+
+        // 1. Execute rule in conversational AI text response naturally
+        responseText += `\n\n🎒 **Recommended Setup Add-ons:**\nTo complete your setup, we also suggest adding **${actionClean}**!`;
+
+        // 2. Execute rule by generating/injecting matching add-on catalog products
+        const actionLower = matchedRule.action.toLowerCase();
+
+        if (actionLower.includes("bag") || actionLower.includes("sleeve")) {
+          addonProducts.push({
+            id: "addon_bag_" + Date.now(),
+            name: "Premium Water-Resistant Laptop Sleeve Bag",
+            price: 1299,
+            price_paise: 129900,
+            category: "Laptop Accessory",
+            brand: "AgentPay Armor",
+            stock: 25,
+            stock_quantity: 25,
+            image_url: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&auto=format&fit=crop&q=80",
+            description: "Shockproof padded notebook sleeve with accessory pouch.",
+          });
+        }
+
+        if (actionLower.includes("stand")) {
+          addonProducts.push({
+            id: "addon_stand_" + Date.now(),
+            name: "UGREEN Ergonomic Aluminium Adjustable Laptop Stand",
+            price: 1899,
+            price_paise: 189900,
+            category: "Laptop Accessory",
+            brand: "UGREEN",
+            stock: 18,
+            stock_quantity: 18,
+            image_url: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=80",
+            description: "Heat dissipation riser stand with 6 adjustable angles.",
+          });
+        }
+
+        if (actionLower.includes("sock")) {
+          addonProducts.push({
+            id: "addon_socks_" + Date.now(),
+            name: "AgentPay Pro Performance Cushion Sports Socks (Pack of 3)",
+            price: 399,
+            price_paise: 39900,
+            category: "Footwear Accessory",
+            brand: "AgentPay Sports",
+            stock: 50,
+            stock_quantity: 50,
+            image_url: "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=500&auto=format&fit=crop&q=80",
+            description: "Breathable moisture-wicking athletic socks.",
+          });
+        }
+
+        if (actionLower.includes("mouse")) {
+          addonProducts.push({
+            id: "addon_mouse_" + Date.now(),
+            name: "Logitech Silent Wireless Ergonomic Mouse",
+            price: 999,
+            price_paise: 99900,
+            category: "Electronics",
+            brand: "Logitech",
+            stock: 30,
+            stock_quantity: 30,
+            image_url: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=80",
+            description: "Ergonomic 2.4GHz silent click optical mouse.",
+          });
+        }
       }
 
       if (isPolicyViolation) {
@@ -694,13 +762,16 @@ function AIShopping({ cart, setCart }) {
 
       if (Array.isArray(data.products) && data.products.length > 0) {
         const topProd = data.products[0];
-        setProducts(data.products.map(normalizeProduct));
+        const combinedList = [...data.products, ...addonProducts];
+        setProducts(combinedList.map(normalizeProduct));
 
         setActiveIntent({
           category: topProd.category || "AI Catalog Match",
           budget: topProd.price ? `₹${Number(topProd.price).toLocaleString("en-IN")}` : "Policy Validated",
           useCase: message.length > 30 ? message.substring(0, 30) + "..." : message
         });
+      } else if (addonProducts.length > 0) {
+        setProducts(addonProducts.map(normalizeProduct));
       }
     } catch (error) {
       console.error("AI Agent Error:", error);

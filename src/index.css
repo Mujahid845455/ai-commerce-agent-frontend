@@ -3960,3 +3960,144 @@ body {
 .yt-product-card:hover img {
   transform: scale(1.06) !important;
 }
+
+/* =========================================================
+   E-COMMERCE SHOPPING CART (FLIPKART / AMAZON STYLE)
+========================================================= */
+
+.cart-tab-container {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.cart-tab-btn {
+  flex: 1;
+  padding: 14px 20px;
+  background: white;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.cart-tab-btn.active {
+  color: #2563eb;
+  background: #f8fafc;
+}
+
+.cart-tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 3px 3px 0 0;
+}
+
+.cart-delivery-banner {
+  background: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.cart-item-card-modern {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  transition: box-shadow 0.2s ease;
+}
+
+.cart-item-card-modern:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.cart-action-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1px solid #f1f5f9;
+  background: #fafafa;
+}
+
+.cart-action-btn {
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid #f1f5f9;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.cart-action-btn:last-child {
+  border-right: none;
+}
+
+.cart-action-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.cart-action-btn.buy-now-btn {
+  color: #2563eb;
+}
+
+.cart-action-btn.buy-now-btn:hover {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.cart-action-btn.remove-btn:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .cart-delivery-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .cart-action-bar {
+    grid-template-columns: 1fr;
+  }
+  
+  .cart-action-btn {
+    border-right: none;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 10px 14px;
+  }
+
+  .cart-layout-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

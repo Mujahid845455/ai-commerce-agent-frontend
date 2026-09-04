@@ -2290,7 +2290,7 @@ function CartPage({ cart, setCart }) {
       return "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400";
     }
     if (name.includes("jewel") || name.includes("bracelet") || name.includes("crystal")) {
-      return "https://images.unsplash.com/photo-1611591475281-b1e96a41f6e2?w=400";
+      return "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400";
     }
     return "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400";
   };
@@ -2505,7 +2505,7 @@ function CartPage({ cart, setCart }) {
                   reviewsCount: 4169,
                   category: "Jewellery",
                   brand: "Om Jewells",
-                  image_url: "https://images.unsplash.com/photo-1611591475281-b1e96a41f6e2?w=400"
+                  image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400"
                 },
                 {
                   id: "om-jewells-2",
@@ -2534,7 +2534,12 @@ function CartPage({ cart, setCart }) {
               ].map((item) => (
                 <div key={item.id} style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#f8fafc", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                    <img src={getItemImage(item)} alt={item.name} style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 10, border: "1px solid #e2e8f0" }} />
+                    <img
+                      src={getItemImage(item)}
+                      alt={item.name}
+                      onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400"; }}
+                      style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 10, border: "1px solid #e2e8f0" }}
+                    />
                     <div>
                       <strong style={{ fontSize: 13, display: "block", color: "#0f172a", lineHeight: 1.3 }}>{item.name}</strong>
                       <div style={{ display: "flex", gap: 6, alignItems: "center", marginTop: 4 }}>
@@ -2581,6 +2586,7 @@ function CartPage({ cart, setCart }) {
                         <img
                           src={getItemImage(item)}
                           alt={item.name}
+                          onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400"; }}
                           style={{ width: 90, height: 90, objectFit: "cover", borderRadius: 10, border: "1px solid #e2e8f0" }}
                         />
 
@@ -2736,7 +2742,12 @@ function CartPage({ cart, setCart }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {savedForLater.map((item) => (
                 <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 16, padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, flexWrap: "wrap" }}>
-                  <img src={getItemImage(item)} alt={item.name} style={{ width: 70, height: 70, objectFit: "cover", borderRadius: 10, border: "1px solid #e2e8f0" }} />
+                  <img
+                    src={getItemImage(item)}
+                    alt={item.name}
+                    onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400"; }}
+                    style={{ width: 70, height: 70, objectFit: "cover", borderRadius: 10, border: "1px solid #e2e8f0" }}
+                  />
                   <div style={{ flex: 1, minWidth: 200 }}>
                     <h4 style={{ margin: "0 0 4px", fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{item.name}</h4>
                     <div style={{ fontSize: 12, color: "#64748b" }}>{item.brand || "Store"} · {item.category || "General"}</div>

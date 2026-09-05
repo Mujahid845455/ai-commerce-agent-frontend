@@ -1,3 +1,4 @@
+import AuthorizationRow from "../components/AuthorizationRow";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -1069,43 +1070,5 @@ export default function Checkout({ cart = [] }) {
       </div>
 
     </main>
-  );
-}
-
-
-// ============================================================
-// AUTHORIZATION ROW
-// ============================================================
-
-function AuthorizationRow({
-  label,
-  value,
-  success = false,
-}) {
-
-  return (
-    <div className="authorization-row">
-
-      <span>
-        {label}
-      </span>
-
-      <strong
-        className={
-          success
-            ? "success-text"
-            : ""
-        }
-      >
-
-        {success && (
-          <Check size={13} />
-        )}
-
-        {value}
-
-      </strong>
-
-    </div>
   );
 }

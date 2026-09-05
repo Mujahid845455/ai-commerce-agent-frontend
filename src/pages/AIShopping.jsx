@@ -39,6 +39,7 @@ import VerifiedPath from "../components/VerifiedPath";
 import CartPreview from "../components/CartPreview";
 import PaymentSuccessModal from "../components/PaymentSuccessModal";
 import PaymentFailureModal from "../components/PaymentFailureModal";
+import AuthorizationRow from "../components/AuthorizationRow";
 
 export default function AIShopping({ cart, setCart }) {
   const navigate = useNavigate();

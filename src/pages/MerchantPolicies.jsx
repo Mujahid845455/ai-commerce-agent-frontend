@@ -208,7 +208,7 @@ export default function MerchantPolicies() {
       {activeCampaign && (
         <div className="active-campaign-banner" style={{ background: activeCampaign.status === "RUNNING" ? "linear-gradient(135deg, #0f172a, #1e1b4b)" : "#1e293b", color: "white", padding: "24px", borderRadius: "16px", marginBottom: "24px", boxShadow: "0 8px 24px rgba(0,0,0,0.12)", border: "1px solid rgba(124, 92, 255, 0.3)" }}>
           <div className="campaign-banner-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: "16px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div className="campaign-title-wrap" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <span style={{ width: 10, height: 10, borderRadius: "50%", background: activeCampaign.status === "RUNNING" ? "#10b981" : "#f59e0b", boxShadow: activeCampaign.status === "RUNNING" ? "0 0 10px #10b981" : "none" }} />
               <strong style={{ fontSize: "16px", fontWeight: "800" }}>ACTIVE CAMPAIGN: {activeCampaign.title}</strong>
               <span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "6px", background: "rgba(255,255,255,0.15)", fontWeight: "700" }}>
@@ -250,7 +250,7 @@ export default function MerchantPolicies() {
 
             <div style={{ background: "rgba(255,255,255,0.06)", padding: "12px 16px", borderRadius: "10px" }}>
               <span style={{ fontSize: "11px", color: "#94a3b8", display: "block" }}>TARGET INVENTORY</span>
-              <strong style={{ fontSize: "13px", color: "#e2e8f0", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeCampaign.target}</strong>
+              <strong className="campaign-target-text" style={{ fontSize: "13px", color: "#e2e8f0", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{activeCampaign.target}</strong>
             </div>
           </div>
         </div>
@@ -388,8 +388,8 @@ export default function MerchantPolicies() {
             {rules.map((r) => (
               <div key={r.id} className="policy-rule-item" style={{ padding: 10, border: '1px solid #f1f5f9', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.trigger}</div>
-                  <div style={{ fontSize: 11, color: '#64748b', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>↳ {r.action}</div>
+                  <div className="rule-trigger-text" style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.trigger}</div>
+                  <div className="rule-action-text" style={{ fontSize: 11, color: '#64748b', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>↳ {r.action}</div>
                 </div>
 
                 <div className="policy-rule-actions" style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -443,6 +443,7 @@ export default function MerchantPolicies() {
       {/* LAUNCH CAMPAIGN POPUP MODAL */}
       {showCampaignModal && (
         <div
+          className="campaign-modal-overlay"
           style={{
             position: "fixed",
             inset: 0,

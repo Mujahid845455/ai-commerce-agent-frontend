@@ -4212,6 +4212,10 @@ body {
     width: 100% !important;
   }
 
+  .campaign-modal-overlay {
+    padding: 12px !important;
+  }
+
   .campaign-modal-inner {
     padding: 20px 16px !important;
     border-radius: 16px !important;
@@ -4227,6 +4231,28 @@ body {
   .campaign-modal-buttons button {
     width: 100% !important;
     justify-content: center !important;
+  }
+
+  .campaign-title-wrap {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .campaign-title-wrap strong {
+    font-size: 14px !important;
+    word-break: break-word !important;
+  }
+
+  .campaign-target-text {
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: 12px !important;
+  }
+
+  .rule-trigger-text,
+  .rule-action-text {
+    white-space: normal !important;
+    word-break: break-word !important;
   }
 }
 

@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
-import { Activity, BrainCircuit, ShieldCheck, Clock3, RefreshCw } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  Bot,
+  BrainCircuit,
+  Clock3,
+  RefreshCw,
+  Save,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 import { formatAuditReason } from "../utils/formatUtils";
 
 export default function AgentActivity({ simulatedCount = 0 }) {

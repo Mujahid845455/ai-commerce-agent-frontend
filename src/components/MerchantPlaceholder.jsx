@@ -1,3 +1,7 @@
+import { Sparkles } from "lucide-react";
+import PageHeader from "./PageHeader";
+import EmptyState from "./EmptyState";
+
 export default function MerchantPlaceholder({ title }) {
   return (
     <main className="simple-page">
@@ -15,7 +19,3 @@ export default function MerchantPlaceholder({ title }) {
     </main>
   );
 }
-
-/* =========================================================
-   COMMON
-========================================================= */

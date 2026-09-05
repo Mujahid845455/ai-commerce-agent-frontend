@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import {
-  ShoppingBag,
-  Search,
-  Filter,
+  Check,
   CheckCircle,
-  Clock3,
-  ShieldCheck,
   ChevronRight,
-  Sparkles,
+  Clock3,
+  Copy,
+  FileText,
+  Filter,
   Package,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
   User,
+  X,
 } from "lucide-react";
 import { api } from "../services/client";
 

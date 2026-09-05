@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import {
+  Check,
+  Edit2,
   Package,
   Plus,
+  Save,
   Search,
-  Edit2,
-  Trash2,
-  Check,
-  X,
-  Sparkles,
-  TrendingUp,
   ShieldCheck,
+  Sparkles,
+  Trash2,
+  TrendingUp,
+  X,
 } from "lucide-react";
 import { api } from "../services/client";
 import { normalizeProduct } from "../utils/productUtils";

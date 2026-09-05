@@ -1,4 +1,9 @@
-import { TrendingUp, BarChart3, CircleDollarSign } from "lucide-react";
+import {
+  BarChart3,
+  ChevronDown,
+  CircleDollarSign,
+  TrendingUp,
+} from "lucide-react";
 
 export default function RevenueCard({ totalRev }) {
   const [period, setPeriod] = useState("Last 30 days");

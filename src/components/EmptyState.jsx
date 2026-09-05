@@ -11,7 +11,3 @@ export default function EmptyState({ icon: Icon, title, description }) {
     </div>
   );
 }
-
-/* =========================================================
-   AUTH / LOGIN
-========================================================= */

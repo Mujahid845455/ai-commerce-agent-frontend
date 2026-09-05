@@ -1,4 +1,7 @@
-import { Check, X } from "lucide-react";
+import {
+  Check,
+  X,
+} from "lucide-react";
 
 export default function AuthorizationRow({ label, value, success }) {
   return (

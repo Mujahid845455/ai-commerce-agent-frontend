@@ -1,3 +1,6 @@
+import {
+  Sparkles,
+} from "lucide-react";
 export default function PageHeader({ kicker, title, description }) {
   return (
     <div className="page-header-modern">

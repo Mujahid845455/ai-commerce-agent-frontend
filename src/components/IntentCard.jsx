@@ -1,3 +1,7 @@
+import {
+  ShieldCheck,
+  Target,
+} from "lucide-react";
 export function IntentCard({ intent }) {
   const category = intent?.category || "Live Catalog";
   const budget = intent?.budget || "Policy Validated";

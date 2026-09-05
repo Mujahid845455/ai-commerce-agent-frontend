@@ -1,4 +1,8 @@
-import { ShoppingBag, ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  ShoppingBag,
+  ShoppingCart,
+} from "lucide-react";
 
 export default function CartPreview({ cart, total, navigate }) {
   return (

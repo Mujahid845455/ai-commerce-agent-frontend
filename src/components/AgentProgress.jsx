@@ -1,4 +1,9 @@
-import { Bot, Sparkles, CheckCircle } from "lucide-react";
+import {
+  Bot,
+  Check,
+  CheckCircle,
+  Sparkles,
+} from "lucide-react";
 
 export default function AgentProgress() {
   const steps = [

@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Sparkles,
-  Package,
-  ShoppingCart,
-  User,
-  LayoutDashboard,
-  ShoppingBag,
   BrainCircuit,
-  TrendingUp,
-  ShieldCheck,
-  History,
   ChevronRight,
+  History,
+  LayoutDashboard,
   LogOut,
+  Menu,
+  Package,
+  ShieldCheck,
+  ShoppingBag,
+  ShoppingCart,
+  Sparkles,
+  TrendingUp,
+  User,
 } from "lucide-react";
 import { api } from "../services/client";
 

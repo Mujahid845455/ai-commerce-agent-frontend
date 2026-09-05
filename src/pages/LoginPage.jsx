@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Sparkles,
+  ArrowRight,
+  Bot,
+  CreditCard,
+  FileCheck2,
+  Key,
   Lock,
   Mail,
-  ArrowRight,
+  RefreshCw,
   ShieldCheck,
-  Key,
+  ShoppingBag,
+  Sparkles,
+  User,
 } from "lucide-react";
 import { api } from "../services/client";
 

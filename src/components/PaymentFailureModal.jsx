@@ -1,4 +1,7 @@
-import { ShieldCheck, X } from "lucide-react";
+import {
+  ShieldCheck,
+  X,
+} from "lucide-react";
 
 export default function PaymentFailureModal({ errorReason, onRetry, onClose }) {
   return (

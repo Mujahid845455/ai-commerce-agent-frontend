@@ -1,4 +1,11 @@
-import { BrainCircuit, CheckCircle, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  BrainCircuit,
+  Check,
+  CheckCircle,
+  ShieldCheck,
+  Sparkles,
+  User,
+} from "lucide-react";
 
 export default function VerifiedPath() {
   const steps = [

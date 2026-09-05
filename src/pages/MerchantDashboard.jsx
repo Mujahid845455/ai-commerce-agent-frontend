@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  BarChart3,
-  CircleDollarSign,
-  Package,
-  ShoppingBag,
-  TrendingUp,
-  Users,
-  BrainCircuit,
-  ShieldCheck,
   Activity,
   ArrowRight,
+  BarChart3,
+  Bot,
+  BrainCircuit,
+  Check,
+  CircleDollarSign,
+  History,
+  LayoutDashboard,
+  Package,
+  ShieldCheck,
+  ShoppingBag,
   Sparkles,
+  TrendingUp,
+  Users,
+  Zap,
 } from "lucide-react";
 import { api } from "../services/client";
 import Metric from "../components/Metric";

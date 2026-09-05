@@ -1,4 +1,9 @@
-import { Sparkles, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  BrainCircuit,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 
 export default function AIInsight({ onAdd }) {
   return (

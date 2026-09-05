@@ -1,18 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Trash2,
   ArrowRight,
-  ShoppingBag,
-  Plus,
-  Minus,
-  ShieldCheck,
-  Sparkles,
-  CreditCard,
+  Bookmark,
   Bot,
   BrainCircuit,
   CheckCircle,
   CircleDollarSign,
+  CreditCard,
+  MapPin,
+  Minus,
+  Plus,
+  Save,
+  ShieldCheck,
+  ShoppingBag,
+  ShoppingCart,
+  Sparkles,
+  Trash2,
+  X,
+  Zap,
 } from "lucide-react";
 import { api } from "../services/client";
 import PaymentSuccessModal from "../components/PaymentSuccessModal";

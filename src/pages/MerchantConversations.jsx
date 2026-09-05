@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import {
   BrainCircuit,
-  Search,
-  Sparkles,
-  ShoppingBag,
-  User,
-  Clock3,
-  ChevronRight,
   CheckCircle,
-  ShieldCheck,
+  ChevronRight,
+  Clock3,
   MessageSquare,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  User,
 } from "lucide-react";
 import { api } from "../services/client";
 

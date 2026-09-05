@@ -1,12 +1,13 @@
 import { useState } from "react";
 import {
+  ArrowRight,
   Bot,
   BrainCircuit,
-  Sparkles,
-  ShieldCheck,
   CheckCircle,
-  X,
   ChevronRight,
+  ShieldCheck,
+  Sparkles,
+  X,
 } from "lucide-react";
 
 export default function MerchantCopilot() {

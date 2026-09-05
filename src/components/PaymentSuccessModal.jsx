@@ -1,4 +1,11 @@
-import { CheckCircle, Sparkles, ShieldCheck, ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CheckCircle,
+  Package,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
 export default function PaymentSuccessModal({ payment, onViewOrder, onClose }) {
   const amount = Number(payment?.total_amount_paise || 0) / 100;

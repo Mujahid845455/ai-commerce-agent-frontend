@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
 import {
-  ShieldCheck,
-  Plus,
-  Edit2,
-  Trash2,
-  Check,
-  X,
   AlertTriangle,
-  Sparkles,
+  Bot,
   BrainCircuit,
-  Save,
-  RefreshCw,
+  Check,
+  CheckCircle,
+  Edit2,
   Lock,
+  Plus,
+  RefreshCw,
+  Save,
+  ShieldCheck,
   Sliders,
+  Sparkles,
+  Trash2,
+  User,
+  X,
+  Zap,
 } from "lucide-react";
 import { api } from "../services/client";
 

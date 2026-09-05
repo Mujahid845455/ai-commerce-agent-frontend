@@ -8,12 +8,13 @@ import {
   Check,
   CheckCircle,
   CircleDollarSign,
-  Copy,
   Clock3,
+  Copy,
   CreditCard,
   FileCheck2,
   FileText,
   Package,
+  RefreshCw,
   Search,
   ShieldCheck,
   ShoppingBag,
@@ -22,9 +23,8 @@ import {
   Target,
   TrendingUp,
   User,
-  Zap,
-  RefreshCw,
   X,
+  Zap,
 } from "lucide-react";
 import { api } from "../services/client";
 import { normalizeProduct } from "../utils/productUtils";

@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
 import {
-  User,
-  ShieldCheck,
-  CreditCard,
-  MapPin,
   Bookmark,
-  Key,
   Check,
-  Edit2,
-  Save,
-  Sparkles,
   Copy,
+  CreditCard,
+  Edit2,
+  Key,
+  MapPin,
   Plus,
+  Save,
+  ShieldCheck,
+  Sparkles,
   Trash2,
+  User,
+  X,
 } from "lucide-react";
 import { api } from "../services/client";
 

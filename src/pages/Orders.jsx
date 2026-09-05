@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import {
-  Package,
-  Clock3,
-  CheckCircle,
-  ExternalLink,
-  ShieldCheck,
-  Sparkles,
-  RefreshCw,
-  FileText,
-  ChevronRight,
-  ShoppingBag,
   ArrowRight,
   Bot,
+  CheckCircle,
+  ChevronRight,
+  Clock3,
+  ExternalLink,
+  FileText,
+  Filter,
+  Package,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
 } from "lucide-react";
 import { api } from "../services/client";
 

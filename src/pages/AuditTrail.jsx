@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import {
-  History,
-  ShieldCheck,
-  CheckCircle,
-  XCircle,
   AlertTriangle,
-  Search,
-  Filter,
-  Clock3,
+  Bot,
   BrainCircuit,
-  RefreshCw,
+  CheckCircle,
+  Clock3,
+  Copy,
   Download,
   ExternalLink,
-  User,
+  FileCheck2,
   FileText,
+  Filter,
+  History,
+  RefreshCw,
+  Search,
+  ShieldCheck,
+  User,
+  XCircle,
 } from "lucide-react";
 import { api } from "../services/client";
 import { formatAuditReason } from "../utils/formatUtils";

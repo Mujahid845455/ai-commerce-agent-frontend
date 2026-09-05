@@ -1,4 +1,10 @@
-import { Check, ShoppingBag, Sparkles, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  ShoppingBag,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 
 function getProductImage(product) {
   const imageUrl = product?.image_url || product?.attributes?.image_url;

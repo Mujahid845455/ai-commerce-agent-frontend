@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { BrainCircuit, ChevronDown } from "lucide-react";
+import {
+  BrainCircuit,
+  ChevronDown,
+} from "lucide-react";
 
 export default function AIDecisionTraceStepper({ searchQuery, itemsCount, budgetCap = 5000 }) {
   const [expanded, setExpanded] = useState(false);

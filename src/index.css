@@ -4080,6 +4080,38 @@ body {
   color: #dc2626;
 }
 
+/* =========================================================
+   CAMPAIGN ORCHESTRATOR & SAFETY POLICIES PAGE
+========================================================= */
+
+.policies-page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px 24px 120px;
+  box-sizing: border-box;
+}
+
+.policies-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.policies-form-save {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 4px;
+}
+
+.policies-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
 @media (max-width: 768px) {
   .cart-delivery-banner {
     flex-direction: column;
@@ -4099,5 +4131,118 @@ body {
 
   .cart-layout-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Campaign Orchestrator & Safety Policies Mobile Fixes */
+  .policies-page {
+    padding: 16px 14px 80px !important;
+  }
+
+  .policies-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+  }
+
+  .policies-header-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .active-campaign-banner {
+    padding: 16px !important;
+    border-radius: 12px !important;
+  }
+
+  .campaign-banner-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .campaign-banner-actions {
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+  }
+
+  .campaign-banner-actions button {
+    flex: 1 !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .campaign-banner-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .policies-card {
+    padding: 16px !important;
+    border-radius: 12px !important;
+  }
+
+  .policies-form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .policies-form-save {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  .policies-form-save button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .policies-two-col {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .add-rule-form {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .add-rule-form input,
+  .add-rule-form button {
+    width: 100% !important;
+  }
+
+  .campaign-modal-inner {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  .campaign-modal-buttons {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .campaign-modal-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .campaign-banner-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .policy-rule-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  .policy-rule-actions {
+    width: 100% !important;
+    justify-content: space-between !important;
   }
 }

@@ -189,14 +189,14 @@ export default function MerchantPolicies() {
     <div className="policies-page">
 
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
+      <div className="policies-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
         <div>
           <h2 style={{ fontSize: 24, fontWeight: 800, margin: 0, color: '#0f172a' }}>Campaign Orchestrator & Safety Policies</h2>
           <p style={{ color: '#64748b', fontSize: 13, margin: '4px 0 0' }}>Configure autonomous agent policies, spending bounds, and AI growth campaigns.</p>
         </div>
 
         <button
-          className="primary-button"
+          className="primary-button policies-header-btn"
           onClick={() => setShowCampaignModal(true)}
           style={{ padding: '10px 20px', background: activeCampaign?.status === "RUNNING" ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #7c5cff, #2563eb)', color: 'white', border: 'none', borderRadius: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 13, boxShadow: '0 4px 12px rgba(124, 92, 255, 0.25)' }}
         >
@@ -206,7 +206,7 @@ export default function MerchantPolicies() {
 
       {/* ACTIVE CAMPAIGN MONITOR BANNER */}
       {activeCampaign && (
-        <div style={{ background: activeCampaign.status === "RUNNING" ? "linear-gradient(135deg, #0f172a, #1e1b4b)" : "#1e293b", color: "white", padding: "24px", borderRadius: "16px", marginBottom: "24px", boxShadow: "0 8px 24px rgba(0,0,0,0.12)", border: "1px solid rgba(124, 92, 255, 0.3)" }}>
+        <div className="active-campaign-banner" style={{ background: activeCampaign.status === "RUNNING" ? "linear-gradient(135deg, #0f172a, #1e1b4b)" : "#1e293b", color: "white", padding: "24px", borderRadius: "16px", marginBottom: "24px", boxShadow: "0 8px 24px rgba(0,0,0,0.12)", border: "1px solid rgba(124, 92, 255, 0.3)" }}>
           <div className="campaign-banner-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <span style={{ width: 10, height: 10, borderRadius: "50%", background: activeCampaign.status === "RUNNING" ? "#10b981" : "#f59e0b", boxShadow: activeCampaign.status === "RUNNING" ? "0 0 10px #10b981" : "none" }} />
@@ -216,7 +216,7 @@ export default function MerchantPolicies() {
               </span>
             </div>
 
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div className="campaign-banner-actions" style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={handleTogglePause}
                 style={{ padding: "6px 14px", background: "rgba(255,255,255,0.15)", color: "white", border: "none", borderRadius: "8px", fontWeight: "700", fontSize: "12px", cursor: "pointer" }}
@@ -232,7 +232,7 @@ export default function MerchantPolicies() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "14px" }}>
+          <div className="campaign-banner-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "14px" }}>
             <div style={{ background: "rgba(255,255,255,0.06)", padding: "12px 16px", borderRadius: "10px" }}>
               <span style={{ fontSize: "11px", color: "#94a3b8", display: "block" }}>PITCHES GENERATED</span>
               <strong style={{ fontSize: "20px", color: "#7c5cff" }}>{activeCampaign.pitchesCount}</strong>
@@ -352,7 +352,7 @@ export default function MerchantPolicies() {
 
       <div className="policies-two-col">
         {/* Safety Bounds Card */}
-        <div style={{ background: 'white', padding: 24, borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+        <div className="policies-card" style={{ background: 'white', padding: 24, borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 800, marginTop: 0, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 8 }}>
             <ShieldCheck size={18} color="#2563eb" /> Security & Bounded Rules
           </h3>
@@ -378,7 +378,7 @@ export default function MerchantPolicies() {
         </div>
 
         {/* Campaign Rules Card */}
-        <div style={{ background: 'white', padding: 24, borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+        <div className="policies-card" style={{ background: 'white', padding: 24, borderRadius: 14, border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 800, marginTop: 0, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 8 }}>
             <Zap size={18} color="#7c5cff" /> Active Agent Rules & Custom Triggers
           </h3>
@@ -386,13 +386,13 @@ export default function MerchantPolicies() {
 
           <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 220, overflowY: 'auto' }}>
             {rules.map((r) => (
-              <div key={r.id} style={{ padding: 10, border: '1px solid #f1f5f9', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+              <div key={r.id} className="policy-rule-item" style={{ padding: 10, border: '1px solid #f1f5f9', borderRadius: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.trigger}</div>
                   <div style={{ fontSize: 11, color: '#64748b', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>↳ {r.action}</div>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div className="policy-rule-actions" style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <button
                     type="button"
                     onClick={() => handleToggleRuleStatus(r.id)}
@@ -544,7 +544,7 @@ export default function MerchantPolicies() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: 12, marginTop: 10 }}>
+              <div className="campaign-modal-buttons" style={{ display: "flex", gap: 12, marginTop: 10 }}>
                 <button
                   type="submit"
                   style={{ flex: 1, padding: "12px", background: "linear-gradient(135deg, #7c5cff, #2563eb)", color: "white", border: 0, borderRadius: 10, fontWeight: 700, cursor: "pointer", fontSize: 14 }}

@@ -16,6 +16,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { api } from "../services/client";
+import { getProductImage } from "../utils/productUtils";
 
 export default function Orders({ setCart }) {
   const [orders, setOrders] = useState([]);

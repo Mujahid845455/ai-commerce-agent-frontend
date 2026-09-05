@@ -4,6 +4,7 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
+import { getProductImage } from "../utils/productUtils";
 
 export default function AIInsight({ onAdd }) {
   return (

@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { api } from "../services/client";
-import { normalizeProduct } from "../utils/productUtils";
+import { normalizeProduct, getProductImage } from "../utils/productUtils";
 
 export default function MerchantProducts() {
   const [products, setProducts] = useState([]);

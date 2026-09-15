@@ -89,13 +89,11 @@ button:disabled {
 
 .topbar {
   height: 68px;
-  padding: 0 32px;
-  max-width: 1440px;
-  margin: 0 auto;
+  padding: 0 28px;
 
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
 
   position: sticky;
   top: 0;
@@ -112,7 +110,7 @@ button:disabled {
   align-items: center;
   gap: 11px;
 
-  min-width: 170px;
+  min-width: 190px;
 
   cursor: pointer;
 }
@@ -159,7 +157,7 @@ button:disabled {
 .main-nav {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   flex: 1;
 }
 
@@ -170,7 +168,7 @@ button:disabled {
   align-items: center;
   gap: 8px;
 
-  padding: 0 14px;
+  padding: 0 12px;
 
   border: 0;
   border-radius: var(--radius-sm);
@@ -212,7 +210,7 @@ button:disabled {
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 9px;
 }
 
 .environment-pill {
@@ -363,7 +361,7 @@ button:disabled {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 28px 32px 120px;
+  padding: 28px 24px 120px;
   box-sizing: border-box;
 }
 
@@ -1457,12 +1455,12 @@ button:disabled {
 ========================================================= */
 
 .verified-section {
-  margin-top: 55px;
+  margin-top: 65px;
 
-  padding: 40px 32px;
+  padding: 50px;
 
   border: 1px solid #e1e7ef;
-  border-radius: var(--radius-xl);
+  border-radius: 22px;
 
   background: white;
 }
@@ -1474,24 +1472,23 @@ button:disabled {
 .verified-heading h2 {
   margin: 9px 0 7px;
 
-  font-size: var(--font-3xl);
+  font-size: 28px;
   letter-spacing: -1px;
 }
 
 .verified-heading p {
   margin: 0;
 
-  color: var(--text-muted);
+  color: #94a3b8;
 
-  font-size: var(--font-sm);
+  font-size: 11px;
 }
 
 .verified-flow {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
 
-  margin-top: 36px;
-  position: relative;
+  margin-top: 42px;
 }
 
 .verified-step {
@@ -1505,60 +1502,53 @@ button:disabled {
 }
 
 .step-number {
-  color: var(--text-brand);
+  color: #94a3b8;
 
-  font-size: var(--font-xs);
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.5px;
 }
 
 .step-circle {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
 
   display: grid;
   place-items: center;
 
-  margin: 10px 0 12px;
+  margin: 8px 0;
 
   color: white;
 
-  border-radius: var(--radius-full);
+  border-radius: 50%;
 
-  background: var(--text-brand);
-  position: relative;
-  z-index: 2;
+  background: #2563eb;
 
   box-shadow:
     0 8px 20px rgba(37, 99, 235, 0.2);
 }
 
 .verified-step strong {
-  font-size: var(--font-sm);
-  color: var(--text-primary);
-  font-weight: 700;
+  font-size: 11px;
 }
 
 .verified-step>span:last-of-type {
-  margin-top: 6px;
+  margin-top: 4px;
 
-  color: var(--text-muted);
+  color: #94a3b8;
 
-  font-size: var(--font-xs);
-  font-weight: 500;
+  font-size: 8px;
 }
 
 .step-connector {
   position: absolute;
 
-  top: 48px;
+  top: 69px;
   left: calc(50% + 22px);
 
   width: calc(100% - 44px);
-  height: 2px;
+  height: 1px;
 
-  background: #cbd5e1;
-  z-index: 1;
+  background: #dbe4ef;
 }
 
 /* =========================================================

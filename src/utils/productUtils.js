@@ -47,19 +47,8 @@ export function getProductImage(product) {
     return "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&auto=format&fit=crop&q=80";
   }
 
-  // Accessories & Footwear (Checked before general apparel)
-  if (name.includes("sock")) return "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=500&auto=format&fit=crop&q=80";
-  if (name.includes("bottle")) return "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=80";
-
-  if (name.includes("campus")) return "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80";
-  if (name.includes("sparx")) return "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&auto=format&fit=crop&q=80";
-  if (name.includes("asian")) return "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=500&auto=format&fit=crop&q=80";
-  if (name.includes("runner") || name.includes("shoe") || name.includes("sneaker") || category.includes("shoes") || category.includes("running") || category.includes("footwear")) {
-    return "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80";
-  }
-
-  // Fashion Apparel - Shirts / Jeans / Jackets
-  if (name.includes("shirt") || name.includes("kurti") || name.includes("dress") || name.includes("jeans") || name.includes("jacket") || category.includes("apparel") || category.includes("clothing")) {
+  // Fashion - Men / Women
+  if (category.includes("men") || category.includes("women") || name.includes("shirt") || name.includes("kurti") || name.includes("dress") || name.includes("jeans") || name.includes("jacket")) {
     return "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=500&auto=format&fit=crop&q=80";
   }
 
@@ -71,6 +60,17 @@ export function getProductImage(product) {
   // Grocery
   if (category.includes("grocery") || name.includes("rice") || name.includes("atta") || name.includes("chocolate") || name.includes("tea") || name.includes("coffee")) {
     return "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=80";
+  }
+
+  // Accessories & Shoes
+  if (name.includes("sock")) return "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?w=500&auto=format&fit=crop&q=80";
+  if (name.includes("bottle")) return "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=80";
+
+  if (name.includes("campus")) return "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80";
+  if (name.includes("sparx")) return "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&auto=format&fit=crop&q=80";
+  if (name.includes("asian")) return "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=500&auto=format&fit=crop&q=80";
+  if (name.includes("runner") || name.includes("shoe") || category.includes("shoes") || category.includes("running")) {
+    return "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=500&auto=format&fit=crop&q=80";
   }
 
   return "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop&q=80";

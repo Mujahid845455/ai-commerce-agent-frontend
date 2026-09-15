@@ -4,17 +4,16 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
-  ShieldCheck,
 } from "lucide-react";
 
 export default function AgentProgress() {
   const [collapsed, setCollapsed] = useState(false);
 
   const steps = [
-    { label: "Intent understood", isPolicy: false },
-    { label: "Catalog searched", isPolicy: false },
-    { label: "Stock checked", isPolicy: false },
-    { label: "Policy validated", isPolicy: true },
+    "Intent understood",
+    "Catalog searched",
+    "Stock checked",
+    "Policy validated",
   ];
 
   return (
@@ -63,15 +62,12 @@ export default function AgentProgress() {
       {!collapsed && (
         <div className="progress-steps">
           {steps.map((step, index) => (
-            <div className="progress-step" key={step.label}>
-              <div
-                className="progress-check"
-                style={step.isPolicy ? { background: "#16a34a" } : {}}
-              >
-                {step.isPolicy ? <ShieldCheck size={12} /> : <Check size={11} />}
+            <div className="progress-step" key={step}>
+              <div className="progress-check">
+                <Check size={11} />
               </div>
 
-              <span style={step.isPolicy ? { color: "#15803d", fontWeight: 700 } : {}}>{step.label}</span>
+              <span>{step}</span>
 
               {index !== steps.length - 1 && <div className="progress-line" />}
             </div>

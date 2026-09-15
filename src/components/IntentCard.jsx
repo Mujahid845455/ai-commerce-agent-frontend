@@ -14,11 +14,25 @@ export function IntentCard({ intent }) {
   const useCase = intent?.useCase || "AI Assistant Query";
 
   return (
-    <section className="intent-panel">
+    <section className="intent-panel" style={{ borderLeft: "4px solid #7046ef" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div className="intent-heading">
+        <div className="intent-heading" style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <Target size={15} />
-          UNDERSTOOD INTENT
+          <span>UNDERSTOOD INTENT</span>
+          <span
+            style={{
+              padding: "2px 8px",
+              borderRadius: "99px",
+              background: "#f0eaff",
+              color: "#7046ef",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0px",
+              textTransform: "none",
+            }}
+          >
+            Step 01 Detail
+          </span>
         </div>
 
         <button
@@ -50,11 +64,6 @@ export function IntentCard({ intent }) {
           <IntentValue label="Maximum budget" value={budget} />
 
           <IntentValue label="Use case" value={useCase} />
-
-          <div className="intent-policy">
-            <ShieldCheck size={15} />
-            <span>Policy validated</span>
-          </div>
         </div>
       )}
     </section>

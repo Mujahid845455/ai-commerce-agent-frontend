@@ -930,7 +930,7 @@ export default function AIShopping({ cart, setCart }) {
           </div>
 
           {/* QUICK PROMPT CHIPS */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, overflowX: "auto", padding: "4px 0", marginBottom: 6 }}>
+          <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", gap: 8, overflowX: "auto", padding: "4px 0", marginTop: 8, marginBottom: 12 }}>
             {[
               "👟 Running shoes under ₹2,500",
               "💻 Laptop setup",
@@ -940,11 +940,11 @@ export default function AIShopping({ cart, setCart }) {
                 key={pText}
                 onClick={() => askAgent(pText)}
                 style={{
-                  padding: "4px 10px",
+                  padding: "5px 11px",
                   background: "#f1f5f9",
                   border: "1px solid #cbd5e1",
-                  borderRadius: 12,
-                  fontSize: 10,
+                  borderRadius: "12px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "#475569",
                   cursor: "pointer",

@@ -43,7 +43,7 @@ export default function AIInsight({ onAdd }) {
       </div>
 
       <div>
-        <button className="secondary-button full-width" onClick={onAdd}>
+        <button className="primary-button full-width" onClick={onAdd}>
           Add recommendation
           <ArrowRight size={15} />
         </button>

@@ -18,15 +18,15 @@ export default function ProductCard({ product, selected, onSelect }) {
     <article className={`product-card ${selected ? "product-selected" : ""}`}>
       <div className="product-visual">
         <div className="match-chip">
-          <Sparkles size={11} />
+          <Sparkles size={12} />
           {product.match}% match
         </div>
 
-        <div style={{ width: '100%', height: '170px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: '12px', margin: '10px 0', background: '#f8fafc' }}>
+        <div style={{ width: '100%', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: '10px', margin: '8px 0', background: '#f8fafc' }}>
           <img
             src={getProductImage(product)}
             alt={product.name}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
           />
         </div>
 
@@ -44,14 +44,12 @@ export default function ProductCard({ product, selected, onSelect }) {
 
         <h3>{product.name}</h3>
 
-        <p>{product.description}</p>
+        <p title={product.description}>{product.description}</p>
 
         <div className="product-tags">
           <span>{product.category}</span>
 
           {product.size && <span>Size {product.size}</span>}
-
-          {product.fit && <span>{product.fit}</span>}
         </div>
 
         <div className="product-footer">
@@ -65,18 +63,19 @@ export default function ProductCard({ product, selected, onSelect }) {
             className={selected ? "added-button" : "select-product"}
             disabled={outOfStock}
             onClick={onSelect}
+            aria-label={selected ? `Added ${product.name} to selection` : `Select ${product.name}`}
           >
             {outOfStock ? (
               <>Out of stock</>
             ) : selected ? (
               <>
-                <Check size={14} />
+                <Check size={15} />
                 Added
               </>
             ) : (
               <>
                 Select
-                <ArrowRight size={14} />
+                <ArrowRight size={15} />
               </>
             )}
           </button>

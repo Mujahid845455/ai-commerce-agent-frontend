@@ -22,6 +22,7 @@ import {
   Sparkles,
   Target,
   TrendingUp,
+  Trash2,
   User,
   X,
   Zap,
@@ -829,13 +830,15 @@ export default function AIShopping({ cart, setCart }) {
               <span style={{ fontSize: 11, color: "#64748b", display: "block" }}>AI Commerce Conversational Assistant</span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981" }} />
               <button
+                className="clear-chat-btn"
                 onClick={() => setChatMessages([{ id: "msg_init", sender: "agent", text: "Hello! 👋 I'm **AgentPay**, your AI commerce assistant. Tell me what you're looking for (e.g. *Running shoes under ₹2,500*)." }])}
-                style={{ background: "transparent", border: 0, color: "#94a3b8", cursor: "pointer", fontSize: 11 }}
                 title="Clear Chat Thread"
+                aria-label="Clear chat thread"
               >
+                <Trash2 size={13} />
                 Clear
               </button>
             </div>
